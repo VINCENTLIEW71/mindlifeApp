@@ -1,0 +1,3581 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  <script src="https://github.com/apache/cordova-plugin-statusbar.git"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=HKD" data-sdk-integration-source="button-factory"></script>
+  <script src="js/login.js"></script>
+  <script src="js/fb.js"></script>
+  <script src="js/main_page.js"></script>
+  <script src="js/interactive_page.js"></script>
+  <script src="js/article.js"></script>
+  <script src="js/event.js"></script>
+  <script src="js/coupon.js"></script>
+  <script src="js/credit.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/mind_life.js"></script>
+  <script src="js/heart_search.js"></script>
+  <script src="js/productservices.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/member_details.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/bookmark.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/comments.js"></script>
+  <script src="js/video.js"></script>
+  <script src="js/free.js"></script>  <!--  New -->
+  <script src="js/filter.js"></script>  <!--  New -->
+  <script src="js/new.js"></script>  <!--  New -->
+  <script src="js/member_details.js"></script>  <!--  New -->
+  <script src="js/ad.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <!-- <link rel="stylesheet" href="css/style.css"> -->
+  <link rel="stylesheet" href="css/main_page.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Libre Barcode 39' rel='stylesheet'>
+ <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  -->
+<style>
+.checked {
+  color: orange;
+}
+</style>
+  <script>
+  document.addEventListener("deviceready", onDeviceReady, false);
+    // Page init event
+   window.fn = {};
+
+  window.fn.open = function() {
+    var menu = document.getElementById('menu');
+    menu.open();
+  };
+
+  window.fn.load = function(page) {
+    var content = document.getElementById('content');
+    var menu = document.getElementById('menu');
+    content.load(page)
+      .then(menu.close.bind(menu));
+  };
+
+  document.addEventListener("show", () => {
+     if (event.target.id === "credit-page") {  
+         //load_user_points();
+         load_credit_info();
+         load_credit_product_info();
+     }
+
+     if (event.target.id === "interest-page") {  
+         load_interest_list();
+     }
+
+     if (event.target.id === "video-view-page") {  
+         load_video_comments_count();
+         load_video_liked_count();
+     }
+
+     if (event.target.id === "paypal-page") {
+      // alert("paypal");  
+       initPayPalButton();
+     }
+
+     if (event.target.id === "newusertask-page") {
+      // alert("paypal");
+       load_new_user_task_list();
+     }
+
+     if (event.target.id === "ad-out-link-page") {
+       alert(sessionStorage.getItem("out_link_active"));
+      if(sessionStorage.getItem("out_link_active") == 'Y'){
+         sessionStorage.setItem("out_link_active" , "N" ); 
+         document.querySelector('#navigator').popPage(); 
+      }
+      // load_new_user_task_list();
+     }
+
+   });
+
+  if (ons.platform.isIPhoneX()) {
+    document.documentElement.setAttribute('onsflag-iphonex-portrait', '');
+    document.documentElement.setAttribute('onsflag-iphonex-landscape', '');
+  }
+  var old_id = '00000';
+  var slideIndex = 1;
+  const list = [];
+  var murl = "https://dev2.thenextbigthinghk.com/mindlifeapp/";
+  $(document).ready(function(){
+
+    let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+
+    if (isMobile) {
+      //  alert("Is Mobile");
+      //  window.location.replace("https://dev2.thenextbigthinghk.com/mindlifeapp/mobile/index.html");
+      sessionStorage.setItem("isMobile" , "Y");
+    }
+    else {
+       sessionStorage.setItem("isMobile" , "N"); 
+    }  
+      
+    sessionStorage.setItem("active_page" , "");
+   // load_occupation_list();
+   // localStorage.setItem("mj_user_id","90001");
+   // alert(localStorage.getItem("is_login"));
+    if(localStorage.getItem("is_login") == "1"){
+       sessionStorage.setItem("active_page" , "main_page");
+       load_main_page();
+       
+    }
+   // load_salary_list()；
+  }); 
+
+       function initPayPalButton() {
+      paypal.Buttons({
+        style: {
+          shape: 'rect',
+          color: 'gold',
+          layout: 'vertical',
+          label: 'paypal',
+          
+        },
+
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{"description":"Payment button for Mind&Life event payment.","amount":{"currency_code":"HKD","value":1}}]
+          });
+        },
+
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(orderData) {
+            
+            // Full available details
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+            // Show a success message within this page, e.g.
+            const element = document.getElementById('paypal-button-container');
+            element.innerHTML = '';
+            element.innerHTML = '<h3>Thank you for your payment!</h3>';
+
+            // Or go to another URL:  actions.redirect('thank_you.html');
+            
+          });
+        },
+
+        onError: function(err) {
+          console.log(err);
+        }
+      }).render('#paypal-button-container');
+    }
+
+  function onDeviceReady()
+  {
+    if (cordova.platformId == 'android') {
+    StatusBar.backgroundColorByHexString("#8c559e");
+    }
+    console.log(NavigationBar);
+    //NavigationBar.backgroundColorByHexString('000000');
+    NavigationBar.hide();  
+  }
+
+  function set_active_page(id){
+  switch(id){
+   case "1" : ap = "main_page"; break;
+   case "2" : ap = "public_page"; break;
+   default : ap = ""; break;   
+  }
+  sessionStorage.setItem("active_page" , ap);
+}
+
+document.addEventListener('deviceready', OneSignalInit, false);
+function OneSignalInit() {
+    // Uncomment to set OneSignal device logging to VERBOSE  
+    // window.plugins.OneSignal.setLogLevel(6, 0);
+    
+    // NOTE: Update the setAppId value below with your OneSignal AppId.
+    window.plugins.OneSignal.setAppId("b41951b9-fb70-4558-9790-db7c1f5041a0");
+    window.plugins.OneSignal.setNotificationOpenedHandler(function(jsonData) {
+        console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+    });
+    
+    // iOS - Prompts the user for notification permissions.
+    //    * Since this shows a generic native prompt, we recommend instead using an In-App Message to prompt for notification permission (See step 6) to better communicate to your users what notifications they will get.
+    window.plugins.OneSignal.promptForPushNotificationsWithUserResponse(function(accepted) {
+        console.log("User accepted notifications: " + accepted);
+    });
+}
+
+</script>
+
+</head>
+<body>
+<!--<ons-navigator id="navigator" page="page1.html"></ons-navigator>-->
+<ons-splitter>
+  <!--<ons-splitter-side id="menu" side="left" width="250px" collapse swipeable>-->
+    <ons-splitter-side id="menu" side="left" width="250px" collapse>
+    <ons-page>
+      <ons-list>
+        <ons-list-item style="background-color: #efefef;">
+          <div class="menuprofile">
+            <table width="100%">
+<tr>
+  <td width="30%" valign="middle"><img src="images/drawer-avatar.png"></td>
+  <td width="70%"><span class="proname">Penny</span><br>info@test.com</td>
+</tr>
+
+</table>
+          </div>
+        </ons-list-item>
+        <ons-list-item expandable>
+       <img src="icons/icon-Magazine1.png" height="30px"><span style="text-indent: 15px;">心活誌</span>
+      <div class="expandable-content"><ons-list-item onclick="load_single_articles2('1')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">心活誌文章</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_single_articles2('2')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">名人專訪</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_single_articles2('3')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">論盡港童</span>
+        </ons-list-item>
+      <!--  <ons-list-item onclick="load_single_articles2('4')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">過往雜誌</span>
+        </ons-list-item>  -->
+        </div>
+    </ons-list-item>
+       
+        <ons-list-item expandable>
+          <img src="icons/video.png" height="30px"><span style="text-indent: 15px;">心活台</span>
+         <div class="expandable-content">
+          <ons-list-item onclick="load_single_video2('1')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">心话志TV</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_single_video2('2')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">星级谈心室</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_single_video2('3')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">真心话大挑机</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_single_video2('4')" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">畅谈心话</span>
+        </ons-list-item>
+
+  </div>
+        </ons-list-item>
+        <ons-list-item expandable>
+          <img src="icons/info.png" height="30px"><span style="text-indent: 15px;">互動區</span>
+          <div class="expandable-content">
+            <ons-list-item onclick="load_event_page()" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">最新活動</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_quiz_page()" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">心理自我測試</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_coupon_page()" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">心活Jetso</span>
+        </ons-list-item>
+  </div>
+        </ons-list-item>
+        <ons-list-item expandable>
+          <img src="icons/heart1.png" height="30px"><span style="text-indent: 15px;">心活百科</span>
+          <div class="expandable-content">
+            <ons-list-item onclick="load_heartsearch_page()" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">心活搜尋</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_searchserviceprovider_page()" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">身心健康服務提供者搜索器</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_productservices_page()" tappable>
+          <img src="icons/like2.png" height="20px"><span style="text-indent: 10px;">產品及服務</span>
+        </ons-list-item>
+
+  </div>
+        </ons-list-item>
+        <ons-list-item onclick="load_memberdetails_page()" tappable>
+          <img src="icons/icon-calendar1.png" height="30px"><span style="text-indent: 15px;">會員信息</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_bookmark_page()" tappable>
+          <img src="icons/path1.png" height="30px"><span style="text-indent: 15px;">我的書籤</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_history_page()" tappable>
+          <img src="icons/clock1.png" height="30px"><span style="text-indent: 15px;">我的記錄</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_couponlist_page()" tappable>
+          <img src="icons/coupon1.png" height="30px"><span style="text-indent: 15px;">我的優惠劵</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_mindlife_page()" tappable>
+          <img src="icons/info.png" height="30px"><span style="text-indent: 15px;">Mind & Life</span>
+        </ons-list-item>
+        <ons-list-item onclick="load_setting_page()" tappable>
+          <img src="icons/gear1.png" height="30px"><span style="text-indent: 15px;">設置</span>
+        </ons-list-item>
+        <ons-list-item  onclick="logout()" tappable>
+          <img src="icons/logout1.png" height="30px"><span style="text-indent: 15px;">登出</span>
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-splitter-side>
+  <ons-navigator id="navigator" page="page1.html"></ons-navigator>
+  <!--<ons-splitter-content id="navigator" page="page1.html"></ons-splitter-content>-->
+</ons-splitter>
+
+
+ <!-- <ons-navigator id="navigator" page="page1.html"></ons-navigator>  -->
+
+ <ons-template id="paypal.html">
+    <ons-page id="paypal-page" > 
+        <ons-toolbar>
+				<div class="left" >
+					<ons-back-button style="padding-bottom:15px;">Page 1</ons-back-button>
+				</div>
+				
+			</ons-toolbar>
+         
+    <div class="w3-container">
+     <div id="smart-button-container" style="margin-top:30px;">
+      <div style="text-align: center;">
+        <div id="paypal-button-container"></div>
+      </div>
+    </div>
+    </div>  
+    </ons-page>
+  </ons-template> 
+  
+  <ons-template id="page1.html">
+   <ons-page id="first-page" >
+      <div style="top:10px; text-align: center;background-color:#8c559e; height:100%; padding-top:20px;">
+         <p><img src="images/logoSplash.png" style="width: 20%;height: auto;"></p>
+         <p><img src="images/img1.png" style="max-width: 90%;height: auto;"></p>
+
+       <div class="w3-center w3-bottom" style="bottom:30px">
+            <ons-button id="to-Page2" style="background-color:white;color:#8c559e;width:200px;" onclick="load_page2()">繼續</ons-button>
+      </div>  
+         
+      </div>
+      
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="login_page2.html">
+   <ons-page id="second-page">
+      <!--    <ons-toolbar>
+         <div class="left"><ons-back-button>Page 1</ons-back-button></div>
+         <div class="center">Page 2</div>
+         </ons-toolbar>  -->
+      <div style="text-align: center;background-color:#8c559e;height:100%; padding-top:10px; padding-bottom:10px">
+         <p>
+            <img src="images/logoSplash.png" class="right" style="width: 20%;height: auto;margin-left: 17%;">
+            <ons-button modifier="quiet" style="float:right;margin-right:5%;color:white;" onclick="load_free_main_page()">跳過 ></ons-button>
+         </p>
+         <p><img src="images/img1.png" style="max-width: 90%;height: auto;"></p>
+         
+         <p>
+            <ons-button id="to-Page3" onclick="load_page3()"style="background-color:white;color: #8c559e;width: 50%;">登錄</ons-button>
+         <p>
+         <p>
+            <ons-button id="" style="background-color:white;color:#8c559e;width: 50%;" onclick="load_registration_page()">立即註冊</ons-button>
+         <p>
+      </div>
+   </ons-page>
+  </ons-template>
+
+   <ons-template id="login_page3.html">
+   <ons-page id="third-page">
+      <!--<div class="backgrounds" style="padding-top:30px"> 
+         <div class="home-content " style="text-align: center; padding-top:20px">
+         
+         -->
+      <div class="content">
+         <div class="backgrounds">
+            <div class="top-bar title-top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <img src="icons/round-back.png" class="backArrow">
+               </a>
+               <br>
+               <p class="login-top-text">登入</p>
+            </div>
+         <!--   <div style="text-align: center;">  -->
+               <div class="login-content page-content" style="text-align: center; padding-bottom:10px; ">
+                <!--  <br/> 
+                  <h2><b>登入</b></h2> -->
+                  <div style="font-size:20px; padding-top:50px"><b>歡迎回來！</b></div>
+                  <br />
+                  <div class="w3-container">
+                     <label class="w3-left w3-medium" style="margin-left:10px;"><b>用戶名稱</b></label>
+                     <!--<ons-input id="username" modifier="underbar" placeholder="輸入您的用戶名稱"></ons-input>-->
+                     <input class="w3-input w3-medium" type="text" id = "user_name"  placeholder="輸入您的用戶名稱">          
+                  </div>
+                  <div class="w3-container">
+                     <label class="w3-left w3-medium" style="margin-left:10px;"><b>密碼</b></label>
+                     <!--<ons-input id="username" modifier="underbar" placeholder="輸入您的用戶名稱"></ons-input>-->
+                     <input class="w3-input w3-medium" type="text" id = "user_password"  placeholder="輸入您的密碼">          
+                  </div>
+                  <div class="w3-container w3-margin-top" style="height:300px;">
+                     <div class="w3-left w3-medium">  
+                        <input class="w3-check" id="check-1" type="checkbox">
+                        <label><b>記住我</b></label>          
+                     </div>
+                     <div class="w3-right">
+                        <ons-button modifier="quiet" style="color:#8c559e;" onclick="forgot_password()">忘記密碼</ons-button>
+                     </div>
+                     
+                  </div>
+                  
+                  <div style="bottom:50px;">
+                     <ons-button onclick="login()" id="push-button" style="background-color: #8c559e;width: 55%;">登入</ons-button>
+                     <br /><br/> 
+                     <ons-button onClick="myfacebook()" style="background-color: #5b9eef;width: 55%; margin-top:10px;">以 Facebook 登入</ons-button>                    
+                     <ons-button id="" onClick="load_google_page()" style="background-color: #f84415;width: 55%;margin-top:3px ">以 Google 登入</ons-button>
+                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                  
+                  <p style="bottom:0;">
+                     還沒有賬號？ 
+                     <ons-button modifier="quiet" style="color:#8c559e;" onclick="load_registration_page()">立即註冊</ons-button>
+                  </p>
+                  </div>  
+               </div>
+           <!-- </div> -->
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="forget_password.html">
+         <ons-page id="forgetpassword-page">           
+        <div class="content">
+         <div class="backgrounds">
+            <div class="top-bar title-top-bar">
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <img src="icons/round-back.png" class="backArrow">
+                     </a>
+                     <br>
+                     <p class="forgetpassword-top-text">重設密碼</p>
+                  </div>
+                  <div style="text-align: center;">
+                     <div class="forgetpassword-content page-content" style="text-align: center; padding-bottom:10px; ">
+                        <br/> 
+                        <h1><b>忘記密碼了嗎？</b></h1>
+                        <p>輸入您的電子郵件地址，我們將向您發送有關如何重置密碼的說明。</p>
+                        <br />
+                        <div class="w3-container">
+                           <label class="w3-left w3-medium" style="margin-left:10px;"><b>電郵</b></label>
+                           <!--<ons-input id="username" modifier="underbar" placeholder="輸入您的用戶名稱"></ons-input>-->
+                           <input class="w3-input w3-medium" type="email" id="forgetpass_email"  placeholder="輸入您的電郵">          
+                        </div>
+                        <br />
+                        
+                           <ons-button  style="background-color:#8c559e;width: 55%;" onclick="user_request_reset_password()" >發送</ons-button>
+                        
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+<!--     <ons-template id="public_page.html">
+    <ons-page id="public-page">
+      
+      <div class="content" style="text-align: center;height:100%">
+        <div class="backgrounds">
+         
+          <ons-button modifier="quiet"  onClick="fn.open()"><img class="btn-drawer" src="icons/drawer.png" name="submit" /></ons-button>
+          
+          <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button" onclick="search_option('public_search')">
+            <i class="fa fa-search"></i>
+          </button>
+          
+          <a href="#" class="button" onclick="load_gift_page()">
+            <figure><img src="icons/gift.png"></figure>
+            <div class="text">
+             禮物
+            </div>
+          </a>
+
+          
+          <div id="public_top_header" class="toptab"></div>
+
+         
+          <div class="mp-home-content2">
+            <div class="tab">
+              <button id="article_fliter_all" class="tablinks activess" onclick="load_article_filter('all')" id="defaultOpen">綜合</button>
+              <button id="article_fliter_hot" class="tablinks " onclick="load_article_filter('hot')">最熱門</button>
+              <button id="article_fliter_new" class="tablinks" onclick="load_article_filter('new')">最新</button>
+              <button id="article_fliter_pick" class="tablinks" onclick="load_article_filtering('pick')">篩選</button>
+            </div> 
+            <div  class="wrapper">
+                <div id="public_top_header" class="scrolls" ></div>
+          </div>       
+          </div>          
+
+          <div class="tabcontent" id="hot">
+          </div>
+          <div class="tabcontent" id="new">
+          </div>
+          
+        </div>
+        <div class="ifooter w3-center" style="height:50px">
+          <a href="#" class="button-bottom" onclick="load_main_page()">
+            <figure><img src="icons/icon-home.png"></figure>
+            <div class="text" onclick="load_main_page()">
+             首頁
+            </div>
+          </a>
+          <a href="#" class="button-bottom">
+            <figure><img src="icons/icon-Magazine-active.png"></figure>
+            <div class="activetext">
+             心話誌
+            </div>
+          </a>
+       
+          <a href="#" class="button-bottom" style="float:right" onclick="load_heartsearch_page()">
+            <figure><img src="icons/heart.png"></figure>
+            <div class="text">
+             心活百科
+            </div>
+          </a>
+          <a href="#" class="button-bottom" style="float:right;">
+            <figure><img src="icons/idea.png" onclick="load_event_page()"></figure>
+            <div class="text" >
+             互動區
+            </div>
+          </a> 
+
+          <a href="#" class="playbtn" onclick="load_single_video('1')" >
+            <figure><img src="icons/middle.png" ></figure>
+          </a>    
+        </div>
+      </div>
+    </ons-page>
+  </ons-template>  -->
+
+  <ons-template id="public_page.html">
+     <ons-page id="public-page">
+      
+      <div class="content" style="text-align: center;height:100%">
+        <div class="backgrounds" >
+       <!--   <div class="fixed-header">  -->
+          <!-- logo -->
+          <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+          <!-- search box -->
+          <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button">
+            <i class="fa fa-search"></i>
+          </button>
+          <!-- Member gift button -->
+          <a href="#" class="button" onclick="load_credit_page()">
+            <figure><img src="icons/gift.png"></figure>
+            <div class="text">會員中心</div>
+          </a>
+
+          <!-- Content title 
+          <div id="public_top_header" class="toptab"></div>  -->
+          <div  class="wrapper">
+                <div id="public_top_header" class="scrolls" ></div>
+          </div>
+          <br />
+
+            <div class="tab">
+              <button id="article_filter_all" class="tablink activetext" onclick="load_article_filter('all')" >綜合</button>
+              <button id="article_filter_hot" class="tablink activetext" onclick="load_article_filter('hot')">最熱門</button>
+              <button id="article_filter_new" class="tablink activetext" onclick="load_article_filter('new')">最新</button>
+              <div class=" w3-row w3-right" style="width:88px; border-left:1px solid lightgray">                
+                <button id="article_filter_pick" class="w3-rest w3-center filtertext"  onclick="load_article_filtering('pick')">
+                   <img class=" w3-left " src="icons/Filter30.png" style="width:20px;margin-left:-10px;">
+                  <span style="padding-left:5px;"> 篩選 </span>
+                </button>
+              </div>
+            </div>
+            <div id="public_main_display" style="height:60%;overflow:scroll; background-color:white"></div>
+         <!-- </div>  -->
+
+          
+        <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" onclick="load_main_page()">
+                           <figure><img src="icons/icon-home.png"></figure>
+                           <div class="text">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine-active.png"></figure>
+                           <div class="activetext">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea.png" style="width:19px; height:24px; margin-bottom:2px;"></figure>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png" style="width:25px; height:22px"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+       </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="tv.html">
+    <ons-page id="tv-page">
+      
+      <div class="content" style="text-align: center;height:100%">
+        <div class="backgrounds">
+          <!-- logo -->
+          <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+          <input type="search" id="video_search_id" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button" >
+            <i class="fa fa-search" onclick="search_option('video')"></i>
+          </button>
+          <!-- Member gift button -->
+          <a href="#" class="button" onclick="load_credit_page()">
+            <figure><img src="icons/gift.png"></figure>
+            <div class="text">會員中心</div>
+          </a>
+
+          <!-- Content title -->
+          <div  class="wrapper">
+                <div id="public_top_header" class="scrolls"></div>
+          </div>
+          
+          <!-- <div id="public_top_header" class="toptab"></div>  -->
+
+          <!-- Content -->
+          <div class="mp-home-content2">
+            <div class="tab">
+              <button id="video_filter_all" class="tablink activetext" onclick="load_video_filter('all')">綜合</button>
+              <button id="video_filter_hot" class="tablink activetext" onclick="load_video_filter('hot')">最熱門</button>
+              <button id="video_filter_new" class="tablink activetext" onclick="load_video_filter('new')">最新</button>
+              <div class=" w3-row w3-right" style="width:88px; border-left:1px solid lightgray">                
+                <button id="video_filter_select" class="w3-rest w3-center filtertext"  onclick="load_video_filtering('select')">
+                   <img class=" w3-left " src="icons/Filter30.png" style="width:20px;margin-left:-10px;">
+                  <span style="padding-left:5px;"> 篩選 </span>
+                </button>
+              </div>
+              
+             <!-- <button id="video_filter_select" class="tablinks " onclick="load_video_filtering('select')">篩選</button>  -->
+            </div> 
+            <div id="video_main_display" style="overflow:scroll"></div>        
+          </div>          
+
+          <div class="tabcontent" id="hot">
+          </div>
+          <div class="tabcontent" id="new">
+          </div>
+          <!-- main page close -->
+        </div>
+<div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" onclick="load_main_page()" >
+                           <figure><img src="icons/icon-home.png"></figure>
+                           <div class="text">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea.png" style="width:20px; height:22px"></figure>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png" style="width:25px; height:22px"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="gift_page.html">
+    <ons-page id="gift-page">
+      
+      <div class="content" style="text-align: center;">
+        <div class="backgrounds">
+          <!-- logo -->
+          <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+          <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button">
+            <i class="fa fa-search"></i>
+          </button>
+          <!-- Member gift button -->
+          <a href="#" class="button" onclick="load_credit_page()">
+            <figure><img src="icons/gift.png"></figure>
+            <div class="text">會員中心</div>
+          </a>
+
+          <!-- Content title -->
+          <div class="toptab">
+            <button class="active">心活誌文章</button>
+            <button>名人專訪</button>
+            <button>論盡港童</button>
+            <button>過往雜誌</button>
+            </div>
+
+          <!-- Content -->
+          <div class="mp-home-content">
+            <div class="tab">
+              <button class="tablinks active" onclick="opentab(event, 'home')" id="defaultOpen">綜合</button>
+              <button class="tablinks" onclick="opentab(event, 'hot')">最熱門</button>
+              <button class="tablinks" onclick="opentab(event, 'new')">最新</button>
+              <button class="tablinks filter">篩選</button>
+            </div>
+            
+            
+            
+              <div class="grow" style="height:600px;overflow:scroll"> 
+                <div class="gcolumn">                  
+                  <div class="ggallery">
+                      <div style="color:#8c559e;" onclick="load_blog()">
+                         <img src="images/magazine/portrait1.png" >
+                         <div style="width:100%; background-color:white; padding:3px;box-shadow: 0px 1px 1px #888888; opacity:0.6">
+                           <div style="width:100%;font-size:12px;padding:0px;text-align:center;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:black"><b>全球為何瘋搶物質？ 觀看次數 : 12K</b></div>
+                           <span style="width:100%; height:auto: font-size:10px;text-align:left; padding:0px"><span class="w3-tag w3-orange w3-left w3-small " style="margin-right:4px">New!</span><span class="w3-tag w3-orange w3-left w3-small " style="margin-right:4px">New!</span><label class="label-text " style="font-size:10px;color:black">觀看次數 : 12K </label></span>
+                         </div>
+                      </div>                      
+                  </div>  
+                   <div class="ggallery">
+                      <div style="color:#8c559e;" onclick="load_blog()">
+                         <img src="images/magazine/portrait3.png" >
+                         <div style="width:100%; background-color:white; padding:3px;box-shadow: 0px 1px 1px #888888; opacity:0.6">
+                           <div style="width:100%;font-size:12px;padding:0px;text-align:center;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:black"><b>全球為何瘋搶物質？ 觀看次數 : 12K</b></div>
+                           <span style="width:100%; height:auto: font-size:10px;padding:2px; text-align:left"><span class="w3-tag w3-orange w3-left w3-tiny " style="margin-right:4px">New!</span><label class="label-text " style="font-size:10px;color:black">觀看次數 : 12K </label></span>
+                         </div>
+                      </div>                      
+                  </div>    
+                   <div class="ggallery">
+                      <div style="color:#8c559e;" onclick="load_blog()">
+                         <img src="images/magazine/portrait5.png" >
+                         <div style="width:100%; background-color:white; padding:3px;box-shadow: 0px 1px 1px #888888; opacity:0.6">
+                           <div style="width:100%;font-size:12px;padding:0px;text-align:center;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:black"><b>全球為何瘋搶物質？ 觀看次數 : 12K</b></div>
+                           <span style="width:100%; height:auto: font-size:10px;padding:2px; text-align:left"><span class="w3-tag w3-orange w3-left w3-tiny" style="margin-right:4px">New!</span><label class="label-text " style="font-size:10px;color:black">觀看次數 : 12K </label></span>
+                         </div>
+                      </div>                      
+                  </div>  
+                    
+                </div>  
+                  <div class="gcolumn">
+                    <div class="ggallery">
+                      <div style="color:#8c559e;" onclick="load_blog()">
+                         <img src="images/magazine/portrait2.png" >
+                         <div style="width:100%; background-color:white; padding:3px;box-shadow: 0px 1px 1px #888888; opacity:0.6">
+                           <div style="width:100%;font-size:12px;padding:0px;text-align:center;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:black"><b>全球為何瘋搶物質？ 觀看次數 : 12K</b></div>
+                           <span style="width:100%; height:auto: font-size:10px;padding:2px; text-align:left"><span class="w3-tag w3-orange w3-left w3-tiny " style="margin-right:4px">New!</span><label class="label-text " style="font-size:10px;color:black">觀看次數 : 12K </label></span>
+                         </div>
+                      </div>                      
+                  </div>  
+                   <div class="ggallery">
+                      <div style="color:#8c559e;" onclick="load_blog()">
+                         <img src="images/magazine/portrait4.png" >
+                         <div style="width:100%; background-color:white; padding:3px;box-shadow: 0px 1px 1px #888888; opacity:0.6">
+                           <div style="width:100%;font-size:12px;padding:0px;text-align:center;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:black"><b>全球為何瘋搶物質？ 觀看次數 : 12K</b></div>
+                           <span style="width:100%; height:auto: font-size:10px;padding:2px; text-align:left"><span class="w3-tag w3-orange w3-left w3-tiny" style="margin-right:4px">New!</span><label class="label-text " style="font-size:10px;color:black">觀看次數 : 12K </label></span>
+                         </div>
+                      </div>                      
+                  </div>  
+                   <div class="ggallery">
+                      <div style="color:#8c559e;" onclick="load_blog()">
+                         <img src="images/magazine/portrait1.png" >
+                         <div style="width:100%; background-color:white; padding:3px;box-shadow: 0px 1px 1px #888888; opacity:0.6">
+                           <div style="width:100%;font-size:12px;padding:0px;text-align:center;white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color:black"><b>全球為何瘋搶物質？ 觀看次數 : 12K</b></div>
+                           <span style="width:100%; height:auto: font-size:10px;padding:2px; text-align:left"><span class="w3-tag w3-orange w3-left w3-tiny" style="margin-right:4px">New!</span><label class="label-text " style="font-size:10px;color:black">觀看次數 : 12K </label></span>
+                         </div>
+                      </div>                      
+                  </div>  
+                </div>
+              </div> 
+          <!--  </div>  -->
+          </div>
+          <div class="tabcontent" id="hot">
+          </div>
+          <div class="tabcontent" id="new">
+          </div>
+          <!-- main page close -->
+        </div>
+        <div class="ifooter w3-center" style="height:50px">
+          <a href="#" class="button-bottom" onclick="load_main_page()">
+            <figure><img src="icons/icon-home.png"></figure>
+            <div class="text">
+             首頁
+            </div>
+          </a>
+          <a href="#" class="button-bottom">
+            <figure><img src="icons/icon-Magazine.png"></figure>
+            <div class="text">
+             心話誌
+            </div>
+          </a>
+          <a href="#" class="playbtn">
+            <figure><img src="icons/middle.png" style="transform: translate(-40% , -15%);"></figure>
+          </a>
+          <a href="#" class="button-bottom" style="float:right" onclick="load_heartsearch_page()">
+            <figure><img src="icons/heart.png"></figure>
+            <div class="text">
+             心活百科
+            </div>
+          </a>
+          <a href="#" class="button-bottom" style="float:right" onclick="load_event_page()">
+            <img src="icons/idea.png" width=18 height=22>
+            <div class="text" style="margin-top:2px; margin-left:3px">
+             互動區
+            </div>
+          </a>
+        </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+
+<ons-template id="blog.html">
+  <ons-page>
+   
+ <div id="article_view" style="background-color:#ffffff;height:150%; ">
+
+  </div>
+  </ons-page>
+</ons-template>
+
+<ons-template id="blog2.html">
+         <ons-page>
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div class="top-bar" style="">
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="aboutus-top-text">留言</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="blogcom-content">
+                     <br>
+                     <div style="padding-left:20px; padding-right: 20px;">
+                        <div id="article_comment">
+                        </div>
+                     </div>
+                     <br><br><br><br>
+                  </div>
+                  <div class="ifooter w3-center" style="height:60px">
+                     <input id="article_comments" type="text" placeholder="請輸入文字..." class="comment-field"/>
+                     <button type="submit" class="comment-button">
+                        <i class="fas fa-chevron-circle-right" style="font-size:20pt;" onclick="save_article_comments()"></i>
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+<ons-template id="video.html">
+  <ons-page id="video-view-page">  
+    <div id="video_page"></div>  
+  </ons-page>
+</ons-template>
+
+<ons-template id="video2.html">
+   <ons-page id="video-comments-page">
+      <div class="backgrounds">
+         <div class="top-bar2 title-top-bar2">
+            <div class="top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="aboutus-top-text">留言</p>
+            </div>
+            <!-- Content -->
+            <div class="blogcom-content">
+               <br>
+               <div style="padding-left:20px; padding-right: 20px;">
+                  <div id="video_comment">
+                  </div>
+               </div>
+               <br><br><br><br>
+            </div>
+            <div class="ifooter w3-center" style="height:60px">
+               <input type="text" id="video_comments" placeholder="請輸入文字..." class="comment-field" name="submit"/>
+               <button type="submit" class="comment-button" onclick="save_video_comments()">
+               <i class="fas fa-chevron-circle-right" style="font-size:20pt;"></i>
+            </div>
+         </div>
+      </div>
+   </ons-page>
+</ons-template>
+
+  <ons-template id="reg_page.html">
+   <ons-page id="reg-page">
+      <div class="content">
+         <div class="backgrounds">
+            <div class="top-bar title-top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="register-top-text">註冊</p>
+            </div>
+            <div class="register-content page-content" style="text-align: center;">
+               <br />
+               <h2><b>创建您的帐户</b></h2>
+               <p><img id="profile-image" src="images/photo.png" style="max-width:100px;max-height:100px;border-radius: 50%;"><input type="image" src="images/cam.png" onclick="picture_selection()" style="margin-left:-15px;"/></p>
+               </br>
+               <div class="w3-container">
+                  <label class="w3-left w3-margin">用戶姓名</label>
+                  <input class="w3-input w3-margin" type="text" id = "user_name" style="width:90%">
+                  <label class="w3-left w3-margin">電郵</label>
+                  <input class="w3-input w3-margin" type="email" id="user_email" style="width:90%">
+                  <label class="w3-left w3-margin">密码</label>
+                  <input class="w3-input w3-margin" type="password" id="user_password" style="width:90%">
+                  <label class="w3-left w3-margin">重复密码</label>
+                  <input class="w3-input w3-margin" type="password" id="user_retype_password" style="width:90%">
+                  <label class="w3-left w3-margin">性別</label>
+                  <table class="w3-table" >
+                     <tr>
+                        <td style="width:70% ;"><input class="w3-input" type="text" id="user_sex"></td>
+                        <td style="width:25%">
+                           <label class="switch1" >
+                              <input type="checkbox" id="user_sex_switch" class="switch1__input" onclick="sex_switch()" checked>
+                              <div class="switch1__toggle">
+                                 <div class="switch1__handle"></div>
+                              </div>
+                           </label>
+                        </td>
+                     </tr>
+                  </table>
+                  <label class="w3-left w3-margin">选择收入</label>
+                  <input class="w3-input w3-margin" type="text" id="user_income" onclick="load_salary_list()" style="width:90%;" readonly">
+                  <p><label class="w3-left w3-margin">选择行业</label></p>
+                  <input class="w3-input w3-margin" type="text" id="user_industries" onclick="load_industries_list()" style="width:90%;" readonly">
+                  <label class="w3-left w3-margin">推荐代码</label>
+                  <input class="w3-input w3-margin" type="text" id="user_recommend" style="width:90%">
+               </div>
+               <button class="w3-button w3-border w3-margin" style="width:50%;background-color: #8c559e;color:white;" id="push-button" onclick="register_user()">继续</button>
+            </div>
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>
+
+
+ <!-- <ons-template id="salary_list.html">
+   <ons-page id="salary-list-page">
+      <div class="content">
+         <div class="backgrounds">
+            <div class="top-bar title-top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="salary-top-text">選擇收入</p>
+            </div>
+            </br>
+            </br>
+            <div class="salary-content w3-container page-content" style="margin-top:10px" id="salary_list_display"></div>
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>  -->
+
+  <ons-template id="salary_list.html">
+   <ons-page id="salary-list-page">
+      <div class="backgrounds">
+         <div class="top-bar2 title-top-bar2">
+            <div class="top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="aboutus-top-text">選擇收入</p>
+            </div>
+            <!-- Content -->
+            <div class="interest_home_content" style="text-align: center; padding-top:20px">
+                <h3><b>请選擇您收入的分類</b></h3>
+               <br>
+               <div class="w3-center" style="padding-left:20px; padding-right: 20px;">
+                  <div id="salary_list_display">
+                  </div>
+               </div>
+               <br><br><br><br>
+            </div>
+            
+         </div>
+      </div>
+   </ons-page>
+</ons-template>
+
+<ons-template id="industries_list.html">
+   <ons-page id="industries-list-page">
+      <div class="backgrounds">
+         <div class="top-bar2 title-top-bar2">
+            <div class="top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="aboutus-top-text">選擇行業</p>
+            </div>
+            <!-- Content -->
+            <div class="interest_home_content" style="text-align: center; padding-top:20px">
+                <h3><b>请選擇您行業的分類</b></h3>
+               <br>
+               <div class="w3-center" style="padding-left:20px; padding-right: 20px;">
+                  <div id="industries_list_display">
+                  </div>
+               </div>
+               <br><br><br><br>
+            </div>
+            
+         </div>
+      </div>
+   </ons-page>
+</ons-template>
+
+<!--  <ons-template id="industries_list.html">
+   <ons-page id="industries-list-page">
+      <div class="content">
+         <div class="backgrounds">
+            <div class="top-bar title-top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="industries-top-text">選擇行業</p>
+            </div>
+            </br>
+            </br>
+            <div class="industries-content w3-container page-content" id="industries_list_display"></div>
+         </div>
+      </div>
+   </ons-page>
+</ons-template>  -->
+
+<!--
+<div class="backgrounds">
+            <div class="top-bar title-top-bar">
+
+<ons-template id="interest_page.html">
+<ons-page id="interest-page">
+<div class="backgrounds">  
+<div class="top-bar2 title-top-bar2">  
+<div class="home-content" style="text-align: center; padding-top:20px">
+  <h3><b>请選擇您感興趣的分類</b></h3>
+<div class="w3-container" id="interest_load_list"></div>   
+<button class="ifooter w3-button w3-padding-16 w3-border w3-purple " onclick="interest_save()" style="margin-left:25%; width:50%;margin-bottom:50px">完成</button>  
+</div>
+</div>
+</div>
+</ons-page>
+</ons-template>  -->
+
+<ons-template id="interest_page.html">
+   <ons-page id="interest-page">
+      <div class="backgrounds">
+         <div class="top-bar2 title-top-bar2">
+            <div class="top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="aboutus-top-text">興趣</p>
+            </div>
+            <!-- Content -->
+            <div class="interest_home_content" style="text-align: center; padding-top:20px">
+                <h3><b>请選擇您感興趣的分類</b></h3>
+               <br>
+               <div class="w3-center" style="padding-left:20px; padding-right: 20px;">
+                  <div id="interest_load_list">
+                  </div>
+               </div>
+               <br><br><br><br>
+            </div>
+            <div class="ifooter w3-center" >
+               <button class="w3-button w3-border w3-padding w3-center w3-purple" style="position:fixed; bottom:70px;left:25%;width:50%" onclick="interest_save()">完成</button>
+            </div>
+         </div>
+      </div>
+   </ons-page>
+</ons-template>
+
+<!--<ons-template id="occupation_page.html">
+    <ons-page id="occupation-page"> 
+   <div class="backgrounds" style="padding-top:30px; height:60%">   
+    <div class="home-content">    
+    <div class="w3-container w3-large w3-center w3-margin" style="padding:30px"><h3><b>请選擇您的職業</b></h3></div>  
+      <div id="occupation_load" style="margin-top:30px"></div>    
+        <button class="w3-button w3-border w3-padding w3-center w3-purple" style="position:fixed; bottom:70px;left:25%;width:50%" onclick="save_occupation()">完成</button>      
+     </div>
+    </div>        
+    </ons-page>
+  </ons-template>  -->
+
+  <ons-template id="occupation_page.html">
+   <ons-page id="occupation-page">
+      <div class="backgrounds">
+         <div class="top-bar2 title-top-bar2">
+            <div class="top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="aboutus-top-text">職業</p>
+            </div>
+            <!-- Content -->
+            <div class="interest_home_content" style="text-align: center; padding-top:20px">
+                <h3><b>请選擇您的職業</b></h3>
+               <br>
+               <div class="w3-center" style="padding-left:20px; padding-right: 20px;">
+                  <div id="occupation_load">
+                  </div>
+               </div>
+               <br><br><br><br>
+            </div>
+            <div class="ifooter w3-center" >
+               <button class="w3-button w3-border w3-padding w3-center w3-purple" style="position:fixed; bottom:70px;left:25%;width:50%" onclick="save_occupation()">完成</button>
+            </div>
+         </div>
+      </div>
+   </ons-page>
+</ons-template>
+
+  <ons-template id="filter.html">
+   <ons-page id="filter-page">
+      <div class="backgrounds">
+         <div class="top-bar2 title-top-bar2">
+            <div class="top-bar">
+               <a href="#" class="back-button" onclick="goBack()">
+               <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+               </a>
+               <br>
+               <p class="aboutus-top-text">篩選</p>
+            </div>
+            <!-- Content -->
+            <div class="blogcom-content">
+               <br>
+               <div class="w3-center" style="padding-left:20px; padding-right: 20px;">
+                  <div id="filtering_load">
+                  </div>
+               </div>
+               <br><br><br><br>
+            </div>
+            <div class="ifooter w3-center" >
+               <button class="w3-button w3-border w3-padding w3-center w3-purple" style="position:fixed; bottom:70px;left:25%;width:50%" onclick="load_article_filter()">完成</button>
+            </div>
+         </div>
+      </div>
+   </ons-page>
+</ons-template>
+
+<!--  <ons-template id="filter.html">
+    <ons-page id="filter-page"> 
+  <div class="backgrounds">
+   <div class="top-bar2 title-top-bar2">  
+        
+    <div class="w3-container w3-large w3-center w3-margin" style="padding:30px"><h3><b>篩選</b></h3></div>  
+      <div id="filtering_load" style="margin-top:30px">
+      
+      </div>    
+        <button class="w3-button w3-border w3-padding w3-center w3-purple" style="position:fixed; bottom:70px;left:25%;width:50%" onclick="save_occupation()">完成</button>      
+      
+      </div> 
+    </div>        
+    </ons-page>
+  </ons-template>  -->
+
+  <ons-template id="introduction.html">
+    <ons-page id="intro-page">
+      <div class="content" style="text-align: center">
+        <img src="images/intro.png" style="max-width:100%;max-height:100%" onclick="load_main_page()">
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="main_page.html">
+         <ons-page id="main-page">
+            <div class="backgrounds" style="text-align:center">
+               <div class="top-bar2 title-top-bar2" style="height:108%;">
+                  <div class="main-fixed-header">
+                    <div style="padding-top:0px;"> 
+                     <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+                     
+                     <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+                     <button type="submit" class="search-button">
+                     <i class="fa fa-search"></i>
+                     </button>
+                     
+                     <a href="#" class="button" onclick="load_credit_page()">
+                        <figure><img src="icons/gift.png"></figure>
+                        <div class="text">會員中心</div>
+                    </a>
+                    </div>
+                   <div  class="wrapper" style="margin-top:5px;">                      
+                       <div id="main_page_header" class="scrolls"></div>
+                    </div>
+                     
+                  </div>  
+                  
+                  <div class="mp-home-content" >
+                      
+                     <div class="mp-slideshow" style="margin-top: 10px">
+                          <div>
+                            <img src="images/skeleton.gif" id="initial_image1" class="mp-slide-img" />
+                          </div>
+                          <div>
+                            <img src="images/skeleton.gif" id="initial_image2" class="mp-slide-img" />
+                          </div>
+                          <div>
+                            <img src="images/skeleton.gif" id="initial_image3" class="mp-slide-img" />
+                          </div>
+                          <div>
+                            <img src="images/skeleton.gif" id="initial_image4" class="mp-slide-img" />
+                          </div>
+                          <div>
+                            <img src="images/skeleton.gif" id="initial_image5" class="mp-slide-img" />
+                          </div>                          
+                      </div>    
+
+                      
+                       <div class="w3-container between"></div>
+
+                     
+                     <div class="mp-video-part">
+                        <span class="mp-hot-video" >熱門影片</span>
+                        <a href="#"><img src="icons/link_icon.png" style="margin-top:5px;" width=15 height=15 onclick="load_filter_video2('hot')"></a>                 
+                     </div>
+                     <div class="flex-container" id="video_list"></div>
+                     <div class="between"></div>
+                     <div class="mp-video-part" style="margin-top:5px">
+                        <span class="mp-hot-video" >最新影片</span>
+                        <a href="#" ><img src="icons/link_icon.png" style="margin-top:5px;" width=15 height=15 onclick="load_filter_video2('new')"></a>                 
+                     </div>
+                     <div class="flex-container" id="new_video_list"></div>
+                     <div class="between"></div>
+                     <div class="mp_wrapper" >
+                        <div class="mp_scrolls">
+                           <img class="mp_category_set" src="images/coupon1.png"  onclick="currentSlide(1)">               
+                           <img class="mp_category_set" src="images/coupon2.png"  onclick="currentSlide(2)">                
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="currentSlide(3)">                
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="currentSlide(3)">                
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="currentSlide(3)">
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="currentSlide(3)">
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="load_mindlife2_page()">  
+                        <!--   <div class="w3-row" style="width:100px; height:80px; background-color: #00CED1; border :2px solid white; margin:3px">
+                              <div class="w3-col" style="width:80px"> 
+                               <img  src="images/coupon2.png"  onclick="currentSlide(2)">
+                              </div>
+                              <div class="w3-col" style="width:20px; background-color:red; margin-top:15px;"> 
+                               <div class="w3-center" style="color:white">80%</div>
+                               <div class="w3-center" style="color:white">off</div>
+                              </div> 
+                           </div>
+                           <div style="width:100px; height:80px; background-color: #00CED1;border :2px solid white; margin:3px"></div>
+                           <div style="width:100px; height:80px; background-color: #00CED1;border :2px solid white; margin:3px"></div>
+                           <div style="width:100px; height:80px; background-color: #00CED1;border :2px solid white; margin:3px"></div>
+                           <div style="width:100px; height:80px; background-color: #00CED1;border :2px solid white; margin:3px"></div>
+                          -->
+                        </div>
+ 
+                     </div>
+                     <div class="between"></div>
+                     
+                     <div>
+                        <div class="mp-video-part">
+                          <span class="mp-hot-video" >熱門文章</span>
+                          <a href="#"><img src="icons/link_icon.png" style="margin-top:5px;" width=15 height=15 onclick="load_filter_video2('hot')"></a>                 
+                        </div> 
+                     <!--   <div style="margin-bottom:10px; margin-top:-10px">
+                           <span class="mp-hot-video">熱門文章</span>
+                           <a href="#" ><img src="icons/link_icon.png" style="margin-top:25px;" width=15 height=15 onclick="load_article_all()"></a>                 
+                        </div>  -->
+                        <div class="flex-container" id="main_page_article_list"></div>
+                        <br>
+                        <br>
+                        <!-- main page close -->
+                     </div>
+                     <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" >
+                           <figure><img src="icons/icon-home-active.png"></figure>
+                           <div class="activetext">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea.png" style="width:19px; height:24px; margin-bottom:2px;"></figure>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png" style="width:24px; height:22px"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+      
+
+    <ons-template id="event.html">
+   <ons-page id="event-page">
+      <div class="content" style="text-align: center">
+         <div class="backgrounds">
+            <div class="fixed-header">
+               <!-- logo -->
+               <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+               <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+               <button type="submit" class="search-button">
+               <i class="fa fa-search"></i>
+               </button>
+               <!-- Member gift button -->
+               <a href="#" class="button" onclick="load_credit_page()">
+                <figure><img src="icons/gift.png"></figure>
+                <div class="text">會員中心</div>
+               </a>
+               <!-- Content title -->
+               <div class="scrolls">
+                  <button class="active">最新活動</button>
+                  <button onclick="load_quiz_page()">心理自我檢測</button>
+                  <button onclick="load_coupon_page()">心活Jetso</button>
+               </div>
+               <br />
+               <div class="tab">
+                  <button id="event_filter_all" class="tablink activetext" onclick="load_event_filter('all')" id="defaultOpen">綜合</button>
+                  <button id="event_filter_hot" class="tablink activetext" onclick="load_event_filter('hot')">最熱門</button>
+                  <button id="event_filter_new" class="tablink activetext" onclick="load_event_filter('new')">最新</button>
+                  <div class=" w3-row w3-right" style="width:88px; border-left:1px solid lightgray">                
+                   <button id="event_filter_select" class="w3-rest w3-center filtertext"  onclick="load_event_filtering('select')">
+                     <img class=" w3-left " src="icons/Filter30.png" style="width:20px;margin-left:-10px;">
+                     <span style="padding-left:5px;"> 篩選 </span>
+                   </button>
+                  </div>                 
+                <!--  <button id="event_filter_select" class="tablinks" onclick="load_event_filtering('select')">篩選</button>  -->
+               </div>
+            </div>
+            <!-- Content -->
+            <div class="event-list-content">
+               <div class="flex-container" id="event_home"></div>               
+               <!-- event page close -->
+            </div>
+   <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" onclick="load_main_page()" >
+                           <figure><img src="icons/icon-home.png"></figure>
+                           <div class="text">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea-active.png" style="width:19px; height:24px; margin-bottom:2px;"></figure>
+                           <div class="activetext">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="event_test.html">
+   <ons-page id="quiz-page">
+      <div class="content" style="text-align: center">
+         <div class="backgrounds">
+            <div class="fixed-header">
+               <!-- logo -->
+               <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+               <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+               <button type="submit" class="search-button">
+               <i class="fa fa-search"></i>
+               </button>
+               <!-- Member gift button -->
+               <a href="#" class="button" onclick="load_credit_page()">
+                <figure><img src="icons/gift.png"></figure>
+                <div class="text">會員中心</div>
+               </a>
+               <!-- Content title -->
+               <div class="scrolls">
+                  <button onclick="load_event_page()">最新活動</button>
+                  <button class="active">心理自我檢測</button>
+                  <button onclick="load_coupon_page()">心活Jetso</button>
+               </div>
+               <br />
+               <div class="tab">
+                  <button id="quiz_filter_all" class="tablinks" onclick="load_quiz_filter('all')">綜合</button>
+                  <button id="quiz_filter_hot" class="tablinks" onclick="load_quiz_filter('hot')">最熱門</button>
+                  <button id="quiz_filter_new" class="tablinks" onclick="load_quiz_filter('new')">最新</button>
+               <!--   <button id="quiz_filter_select" class="tablinks" onclick="load_quiz_filter('select')">篩選</button>  -->
+               </div>
+            </div>
+            <!-- Content -->
+            <div class="quiz-list-content">
+               <div class="tabcontent" id="quiz_home">
+                  
+               </div>
+               <div class="tabcontent" id="hot">
+               </div>
+               <div class="tabcontent" id="new">
+               </div>
+               <!-- quiz page close -->
+            </div>
+            <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" >
+                           <figure><img src="icons/icon-home-active.png"></figure>
+                           <div class="activetext">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <img src="icons/idea.png" width=18 height=22>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>
+
+    <ons-template id="hot_video.html">
+         <ons-page id="hot-video-page">            
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <a href="#" class="back-button" onclick="document.querySelector('#navigator').popPage()">
+                     <img src="icons/round-back.png" class="backArrow">
+                     </a>
+                     <br>
+                     <p class="quiz-top-text">熱門影片</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="quiz-content"  style="height:110%">
+                     <br>
+                     <div class="quiz-content-text" >
+                        <div id="hotvideo-content"></div>
+                        
+                     </div>
+                     <!-- close content -->
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="event_test2.html">
+         <ons-page id="quizdesc-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="quiz-top-text">心理自我檢測</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="quiz-content">
+                     <br>
+                     <div class="quiz-content-text">
+                        <div id="quiz_viewer"></div>
+                        <!--<p3>你這輩子財運是好是壞？</p3>
+                           <p>「發財啊!」想想就讓人很激動，可事實上不是每個人都能發財，都能成為有錢人。現實生活中你的財運會很好嗎？今生是否擁有成為富翁的命呢？科技紫微網來測測你這一生 的主體財運會怎樣吧！</p>
+                           <br /><br /><br />
+                           <p style="text-align:center"><ons-button onclick="load_quizquest_page()" id="" style="background-color: #8c559e;width: 55%;">開始測驗</ons-button></p>-->
+                     </div>
+                     <!-- close content -->
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+
+      <ons-template id="event_test3.html">
+         <ons-page id="quizquest-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="quiz-top-text">心理自我檢測</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="quiz-content">
+                     <br>
+                     <div style="padding-left:20px; padding-right: 20px;">
+                        <div id="quiz_detail"></div>
+                     </div>
+                     <!--<ons-card>
+                        <div class="quiz-quest-title">
+                          問題1
+                        </div>
+                        <div class="quiz-quest-content">
+                          <p>如果得到1000萬元，你是想要一次領完，還是分10年領，每個月領個幾萬塊？</p>
+                          <ons-list>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques1" input-id="radio-1a"></ons-radio>
+                              </label>
+                              <label for="radio-1a" class="center">
+                                一次領完
+                              </label>
+                            </ons-list-item>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques1" input-id="radio-1b"></ons-radio>
+                              </label>
+                              <label for="radio-1b" class="center">
+                                分10年領
+                              </label>
+                            </ons-list-item>
+                          </ons-list>
+                        </div>
+                        </ons-card>
+                        <ons-card>
+                        <div class="quiz-quest-title">
+                          問题2
+                        </div>
+                        <div class="quiz-quest-content">
+                          <p>你對於結婚對象的條件中，長相是非不可缺少？？？</p>
+                          <ons-list>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques2" input-id="radio-2a"></ons-radio>
+                              </label>
+                              <label for="radio-2a" class="center">
+                                是
+                              </label>
+                            </ons-list-item>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques2" input-id="radio-2b"></ons-radio>
+                              </label>
+                              <label for="radio-2b" class="center">
+                                不是
+                              </label>
+                            </ons-list-item>
+                          </ons-list>
+                        </div>
+                        </ons-card>
+                        <ons-card>
+                        <div class="quiz-quest-title">
+                          問题3
+                        </div>
+                        <div class="quiz-quest-content">
+                          <p>對於自己感興趣的工作，即使要你犧牲個人時間也無所謂嗎？</p>
+                          <ons-list>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques3" input-id="radio-3a"></ons-radio>
+                              </label>
+                              <label for="radio-3a" class="center">
+                                是
+                              </label>
+                            </ons-list-item>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques3" input-id="radio-3b"></ons-radio>
+                              </label>
+                              <label for="radio-3b" class="center">
+                                不是
+                              </label>
+                            </ons-list-item>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques3" input-id="radio-3c"></ons-radio>
+                              </label>
+                              <label for="radio-3c" class="center">
+                                還好
+                              </label>
+                            </ons-list-item>
+                            <ons-list-item tappable>
+                              <label class="left">
+                                <ons-radio name="ques3" input-id="radio-3d"></ons-radio>
+                              </label>
+                              <label for="radio-3d" class="center">
+                                不確定
+                              </label>
+                            </ons-list-item>
+                          </ons-list>
+                        </div>
+                        </ons-card>-->
+                     <br />
+                     <p style="text-align:center">
+                        <ons-button onclick="load_quizresult()" id="" style="background-color: #8c559e;width: 55%;">提交</ons-button>
+                     </p>
+                     <br />
+                  </div>
+                  <!-- close content -->
+               </div>
+            </div>
+            </div>
+         </ons-page>
+      </ons-template>
+      <ons-template id="event_test4.html">
+         <ons-page id="quizresult-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <br>
+                     <p class="quizresult-top-text">心理自我檢測</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="quiz-content page-content">
+                     <div style="padding-left:20px; padding-right: 20px;">
+                        <div id="quiz_result"></div>
+                     </div>
+                     <!--<ons-card>
+                        <div class="quiz-quest-title">
+                          你這輩子財運是好是壞?
+                        </div>
+                        <div class="quiz-quest-content">
+                          <p>測驗結果：</p>
+                          <p class="quiz-result">錢財不虞匱乏</p>
+                          <p class="quiz-result-desc">錢財對你來說是不虞匱乏的，不僅工作事業所得高，還有偏財運，擅於理財，多管道規劃是你的原則，舉凡儲蓄、金融投資、置產都是你選擇的範圍。錢轉錢、錢賺錢雖是現今投資賺錢的方式，而你的周轉能力也很不錯，但還是要小心因擴張信用而導致危機。</p>
+                          <br /><br /><br />
+                          <p style="text-align:center"><ons-button onclick="" id="" style="background-color: #5b9eef;width: 55%;">分享到 Facebook</ons-button></p>
+                        </div>
+                        </ons-card>-->
+                     <br><br>
+                     <p style="text-align:center">
+                        <ons-button onclick="goBack()" id="" style="background-color: #8c559e;width: 55%;">重新測驗</ons-button>
+                     </p>
+                     <p style="text-align:center">
+                        <ons-button onclick="load_quiz_page()" id="" style="background-color: #8c559e;width: 55%;">回到主頁</ons-button>
+                     </p>
+                     <br />
+                  </div>
+                  <!-- close content -->
+               </div>
+            </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="coupon.html">
+   <ons-page id="coupon-page">
+      <div class="content" style="text-align: center">
+         <div class="backgrounds">
+            <div class="fixed-header">
+               <!-- logo -->
+               <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+               <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+               <button type="submit" class="search-button">
+               <i class="fa fa-search"></i>
+               </button>
+               <!-- Member gift button -->
+               <a href="#" class="button" onclick="load_credit_page()">
+                <figure><img src="icons/gift.png"></figure>
+                <div class="text">會員中心</div>
+               </a>
+               <!-- Content title -->
+               <div class="scrolls">
+                  <button onclick="load_event_page()">最新活動</button>
+                  <button onclick="load_quiz_page()">心理自我檢測</button>
+                  <button class="active">心活Jetso</button>
+               </div>
+               <br />
+               <div class="tab">
+                  <button id="coupon_filter_all" class="tablinks" onclick="load_coupon_filter('all')" id="defaultOpen">綜合</button>
+                  <button id="coupon_filter_hot" class="tablinks" onclick="load_coupon_filter('hot')">最熱門</button>
+                  <button id="coupon_filter_new" class="tablinks" onclick="load_coupon_filter('new')">最新</button>
+                  <button id="coupon_filter_select" class="tablinks" onclick="load_coupon_filter('select')">篩選</button>
+               </div>
+            </div>
+            <!-- Content -->
+            <div class="coupon-content">
+               <div class="tabcontent" id="coupon_home"></div>
+            <!--   <div class="tabcontent" id="hot">
+               </div>
+               <div class="tabcontent" id="new">
+               </div>
+                coupon page close -->
+            </div>
+            <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" >
+                           <figure><img src="icons/icon-home-active.png"></figure>
+                           <div class="activetext">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <img src="icons/idea.png" width=18 height=22>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="event_心活Jetso_2.html">
+   <ons-page id="coupon-details-page">
+      <div id="coupon_viewer"></div>
+      <!--<ons-card>
+         <div class="card-image">
+           <div class="back">
+             <img src="images/magazine/portrait5.png" class="thumbnail" style="width:150%;">
+             <i class="fas fa-arrow-left" style="font-size:20px;text-shadow: 2px 2px 4px #000000; color:#ffffff;" onclick="load_coupon_page()"></i>
+           </div>
+         </div>
+         <div class="title">
+           香港杜莎夫人蠟像館門票買一送一優惠
+         </div>
+         <div class="event-content">
+           <div class="datepost">
+           發佈於 June 8, 2020
+           </div>
+           <table width="100%">
+             <tr>
+               <td width="50%" valign="middle"><span class="tag">旺角</span><span class="tag2">王醫生</span></td>
+               <td width="50%" align="right"> <img src="icons/like2.png" height="30px" style="margin-right:10px;"><img src="icons/share2.png" height="30px" style="margin-right:10px;"></td>
+             </tr>
+           </table>
+           <table width="50%">
+             <tr>
+               <td width="2%" valign="middle"><ons-icon icon="fa-user"></ons-icon></td>
+               <td width="28%"><span style="text-indent: 15px;font-size:15px;">14人下載</span></td>
+             </tr></table>
+           
+             <p style="font-size:15px;">
+               優惠詳情
+               <ul style="padding:0;">
+                 <li>優惠期有效期由2020年6月15至8月31日為止。</li>
+                 <li>優惠只適用於香港居民。</li>
+                 <li>如有查詢，請電郵至info@xxx.com.hk 或致電+852 1234 1234。</li>
+               </ul>
+             </p>
+         
+             <p style="font-size:15px;">
+               如何使用
+               <ul style="padding:0;">
+                 <li>於香港杜莎夫人蠟像館正門售票處購票時出示有效 香港身份證即可享有此優惠。</li>
+               </ul>
+             </p>
+         
+             <p style="font-size:15px;">
+               商戶條款及細則 <br />
+               優惠須受香港杜莎夫人蠟像館成人門票之條款及細則約束。詳情請按此。<br />
+               <ons-button modifier="quiet" onclick="load_coupon_tnc()"><詳情請按此參閱></ons-button>
+             </p>
+         
+             <p style="font-size:15px;">
+               內容由商戶提供。
+             </p>
+             <p style="text-align:center"><ons-button onclick="" id="" style="background-color: #8c559e;width: 55%;">下載優惠</ons-button></p>
+         </div>
+         </ons-card>-->
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="event_心活Jetso_3.html">
+   <ons-page id="coupontnc-page">
+      <!-- <ons-toolbar>
+         <div class="center">Page 1</div>
+         </ons-toolbar> -->
+      <div class="content">
+         <div class="backgrounds">
+            <div class="top-bar title-top-bar">
+               <i class="fas fa-arrow-left" style="font-size:30px;text-shadow: 2px 2px 4px #000000; color:#ffffff;margin-left:10px;margin-top:15px;" onclick="goBack()"></i>
+               <!--<br>
+                  <p class="coupontnc-top-text">固本詳情</p>-->
+            </div>
+            <!-- Content -->
+            <div class="coupontnc-content page-content">
+               <div class="coupontnc-content-text">
+                  <div id="coupon_tnb"></div>
+                  <!--<p>一般條款及細則</p>
+                     <p>1. 除特別聲明外，優惠推廣日期由2020年6月15日至9月30日為止。</p>
+                     <p>2. 本活動所有產品、服務、諮詢及建議均由參與景點提供並全權負責。香港旅遊發展局並非該等產品及/或服務、諮詢及建議之提供者，亦不對該等產品及/或服務、諮詢及建議作出任何陳述或保證。</p>
+                     <p>3. 本優惠只適用於香港居民。有需要時，參與景點可要求訪客出示有效香港身份證件以作確認。。</p>
+                     <p>4. 所有優惠不可兌換現金或換成其他貨品或折扣，並不設退換。</p>
+                     <p>5. 除特別列明外，優惠不可與參與景點之任何其他推廣優惠、折扣/特價產品、公價產品、禮券現金券、積分計劃、參與景點內部優惠同時使用。</p>
+                     <p>6. 優惠數量有限，先到先得。</p>
+                     <p>7. 如指定之優惠產品售完，參與景點將提供其他等值或更高價值的優惠。</p>
+                     <p>8. 優惠並不適用於參與景點之特定日期(如適用)。詳情請向參與景點查詢。</p>
+                     <p>9. 每位合資格的優惠使用者每次惠顧只可享優惠。</p>-->
+               </div>
+               <!-- close content -->
+            </div>
+         </div>
+      </div>
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="event2.html">
+   <ons-page id="event-details-page">
+      <div id="event_viewer"></div>
+      <!--  <ons-card>
+         <div class="card-image">
+           <div class="back">
+             <img src="images/interactive.png" class="thumbnail" style="max-width:100%;">
+             <i class="fas fa-arrow-left" style="font-size:20px;text-shadow: 2px 2px 4px #000000; color:#ffffff;" onclick="goBack()"></i>
+           </div>
+         </div>
+         <div class="title">
+           「瑜伽x減壓」 心理健康工作坊
+         </div>
+         <div class="event-content">
+           <div class="datepost">
+           發佈於 June 8, 2020
+           </div>
+           <table width="100%">
+             <tr>
+               <td width="50%" valign="middle"><span class="tag">旺角</span><span class="tag2">王醫生</span></td>
+               <td width="50%" align="right"> <img src="icons/like2.png" height="30px" style="margin-right:10px;"><img src="icons/share2.png" height="30px" style="margin-right:10px;"></td>
+             </tr>
+           </table>
+           <table width="50%">
+             <tr>
+               <td width="2%" valign="middle"><ons-icon icon="fa-user"></ons-icon></td>
+               <td width="28%"><span style="text-indent: 15px;font-size:15px;">14人報名</span></td>
+             </tr></table>
+           
+             <p style="font-size:15px;">
+               日期:2021年12月31日（星期五）<br />
+               時間:晚上 7:30-8.30 <br />
+               地點:九龍彌敦道570號基利商業大廈6樓全層(近油麻地港鐵站A2出口) <br />
+               *出席者需戴上口罩方可参加* <br />
+             </p>
+         
+             <p style="font-size:15px;">
+               對象：<br />
+               16歲以上,無嚴重傷患人士
+             </p>
+         
+             <p style="font-size:15px;">
+               費用：HKD $150 <br />
+               兩人同行優惠: 每人額外減$30 （每位只需HKD$120) 
+             </p>
+         
+             <p style="font-size:15px;">
+               付款方法：<br />
+               1. 填妥下方報名表格，並以 信用卡 或 Paypal帳戶付款;或 <br />
+               2. 以銀行轉賬/入數方式付款,請先按此或 
+             </p>
+             <p style="text-align:center"><ons-button onclick="load_registerevent_page()" id="" style="background-color: #8c559e;width: 55%;">立即報名</ons-button></p>
+         </div>
+         </ons-card> -->
+   </ons-page>
+  </ons-template>
+
+  <ons-template id="eventreg.html">
+    <ons-page id="eventreg-page">
+      testing
+      <div id="event_reg"></div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="event3.html">
+         <ons-page id="registerevent-page">
+            <!--<div class="backgrounds" style="padding-top:30px"> 
+               <div class="home-content " style="text-align: center; padding-top:20px">
+               -->
+            <div class="backgrounds" style="text-align: center;">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="registerevent-top-text">報名表格</p>
+                  </div>
+                  <div class="registerevent-content" style="text-align: center;">
+                     <br/>
+                     <p><b>填妥下方報名表格，並以 信用卡 或 PayPal賬戶 付款。</b></p>
+                     <br />
+                     <div class="w3-container">
+                        <label class="w3-left w3-medium" style="margin-left:10px;"><b>人數</b></label>
+                        <select class="w3-input w3-medium" name="event_no_person" id="event_no_person">                           
+                           <option value="1" selected>1</option>
+                           <option value="2">2</option>
+                           <option value="4">4</option>
+                        </select>
+                     </div>
+                     <div class="w3-container">
+                        <label class="w3-left w3-medium" style="margin-left:10px;"><b>姓名</b></label>
+                        <input class="w3-input w3-medium" type="text" id = "event_user_name"  placeholder="輸入您的姓名">          
+                     </div>
+                     <div class="w3-container">
+                        <label class="w3-left w3-medium" style="margin-left:10px;"><b>性別</b></label>
+                        <select class="w3-input w3-medium" name="event_user_gender" id="event_user_gender">
+                           <option value="13" selected>男</option>
+                           <option value="14">女</option>
+                        </select>
+                     </div>
+                     <div class="w3-container">
+                         
+                        <label class="w3-left w3-medium" style="margin-left:10px;"><b>聯絡電話</b></label>
+                        <input class="w3-input w3-medium" type="tel" maxlength="8" id = "event_user_phone"  placeholder="輸入您的聯絡電話" required>          
+                     </div>
+                     <div class="w3-container">
+                        <label class="w3-left w3-medium" style="margin-left:10px;"><b>電郵</b></label>
+                        <input class="w3-input w3-medium" type="email" id = "event_user_email"  placeholder="輸入您的電郵">          
+                     </div>
+                     <div class="w3-container">
+                        <label class="w3-left w3-medium" style="margin-left:10px;"><b>閣下如何得知此活動？</b></label>
+                        <select class="w3-input w3-medium" name="event_user_how" id="event_user_how">
+                           <option value="web" selected>網頁</option>
+                           <option value="facebook">Facebook</option>
+                           <option value="google">Google</option>
+                        </select>
+                     </div>
+                     <div class="w3-container w3-margin-top">
+                        <p>接收《Mind & Life 心活誌》活動通訊的意願（過往填寫過的用戶，毋須另行填寫也可繼續自動接收通訊）</p>
+                        <div class="w3-left w3-medium">  
+                           <input class="w3-check" id="check-1" type="checkbox">
+                           <label><b>本人希望日後可接收《Mind & Life 心活誌》活動通訊</b></label>       
+                        </div>
+                        <br /><br /><br />
+                        <p>*點擊「報名及付款」後，你將會被導引至PayPal網站繼續進行信用卡 或 PayPal賬戶結賬。</p>
+                        <p>*由於不涉及送貨服務，進入結賬網站後，毋須填寫確實地址。</p>
+                     </div>
+                     <div id="reg_event_amt" style="font-size:18pt"><b>總額：$ </b><span id="reg_event_amt"></span> </div>
+                     <p style="margin-top: 30px;">
+                        <ons-button onclick="event_registration()" id="push-button" style="background-color: #8c559e;width: 55%;" >報名及付款</ons-button>
+                        <br /><br/> 
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="credit.html">
+         <ons-page id="credit-page">            
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <a href="#" class="back-button" onclick="goBack()">
+                <!--  <i class="fa fa-long-arrow-left" aria-hidden="true"></i>  -->
+                  <img src="icons/round-back.png" class="backArrow">
+                  </a>
+                  <br>
+                  <p class="credit-top-text">會員積分</p>
+                  <div class="credit-content">
+                     <br>
+                     <div class="point-box w3-center">
+                        <div class="w3-center">
+                            <label class="point-text">Mind & Life 積分</label>
+                            <div>                           
+                             <img src="icons/coin.png" class="member-point" />
+                             <label class="total-point"><span id="user_total_points">100000</span></label>                           
+                              <div  class="w3-center"><label class="text-use">可用積分</label> </div>
+                           </div>
+                        </div> 
+                     </div>
+                        <div class="w3-center w3-row">
+                           <img src="images/logo1.png" class="w3-col image-logo" />  
+                           <div class="w3-rest">
+                              <p class="center-text">透過使用指定服務賺取積分！</p>
+                           </div>
+                        </div>    
+                        <!--  
+                        <table>
+                           <tr>
+                              <td rowspan="3"><img src="images/logo1.png" class="image-logo" /></td>
+                              
+                           </tr>
+                           <tr  class="w3-right">
+                              <td><img src="icons/coin.png" class="member-point" />
+                                 <label class="total-point"><span id="user_total_points">100000</span></label>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td   class="w3-center"><label class="text-use">可用積分</label></td>
+                           </tr>
+                        </table>  
+                       
+                     </div>
+                     <br>
+                     <div>
+                        <p class="center-text">透過使用指定服務賺取積分！</p>
+                     </div>
+                     <br>  -->
+                     <div>
+                        <label class="new-mission">新手任務</label>
+                        <a href="#" class="link" onclick="new_user_task_page()">
+                        更多
+                        <img src="icons/link_icon.png">
+                        </a>  
+                     </div>
+                     <div  class="w3-container" id="newie_task"></div>
+                  
+                     <br />
+                     <div style="">
+                        <label class="daily-text">每日任務</label>
+                        <a href="#" class="link" onclick="daily_task_page()">
+                        更多
+                        <img src="icons/link_icon.png">
+                        </a>
+                     </div>
+                     <div id="daily_task"></div>
+                   
+                     <br />
+                     <div>
+                        <label class="redeem-gift">積分換禮</label>
+                        <a href="#" class="link" onclick="load_productservices_page()">
+                        更多
+                        <img src="icons/link_icon.png">
+                        </a>
+                     </div>
+                     <div class="tabcontent" id="home">
+                        <div id="point_product_list" class="redeem-row">                       
+                        </div>
+                        <br /><br />
+                        <div style="margin-top:20px">
+                           <label class="point-record">積分記錄</label>
+                           <a href="#" class="link" onclick="point_history_page()">
+                           更多
+                           <img src="icons/link_icon.png">
+                           </a>
+                        </div>
+                        <div id="points_listing_1"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!--  </div>  -->
+         </ons-page>
+      </ons-template>
+      <ons-template id="new-user-task.html">
+         <ons-page id="newusertask-page">            
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <a href="#" class="back-button" onclick="document.querySelector('#navigator').popPage()">
+                  <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                  </a>
+                  <br>
+                  <p class="credit-top-text">新手任務</p>
+                  <!-- Content -->
+                  <div id="new_user_task" class="w3-container credit-content" ></div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+      <ons-template id="daily-task.html">
+         <ons-page id="dailytask-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <a href="#" class="back-button" onclick="document.querySelector('#navigator').popPage()">
+                  <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                  </a>
+                  <br>
+                  <p class="credit-top-text">每日任務</p>
+                  <!-- Content -->
+                  <div class="credit-content page-content">
+               <!--      <div class="daily-mission-row">                      
+                           <div class="card more-daily-mission-box">
+                              <label class="daily-mission-text">分享文章</label>
+                              <label class="plus-point"> 10 </label>
+                              <img src="icons/coin.png" class="add-point" />
+                              <label class="plus"> + </label>
+                              <br>
+                              <label class="daily-mission-content">
+                                 分享
+                                 <論盡港童>
+                                 文章
+                              </label>
+                              <br>
+                              <div class="w3-light-grey w3-tiny w3-round-xlarge">
+                                 <div class="moredaily-statusbar w3-tiny w3-pink w3-round-xlarge" style="width:25%;">25%</div>
+                              </div>
+                              <br>
+                              <button class="moredaily-to-do-button">去完成</button>
+                           </div>
+                           <div class="card more-daily-mission-box">
+                              <label class="daily-mission-text">分享文章</label>
+                              <label class="plus-point"> 10 </label>
+                              <img src="icons/coin.png" class="add-point" />
+                              <label class="plus"> + </label>
+                              <br>
+                              <label class="daily-mission-content">
+                                 分享
+                                 <論盡港童>
+                                 文章
+                              </label>
+                              <br>
+                              <div class="w3-light-grey w3-tiny w3-round-xlarge">
+                                 <div class="moredaily-statusbar w3-tiny w3-pink w3-round-xlarge" style="width:25%;">25%</div>
+                              </div>
+                              <br>
+                              <button class="moredaily-to-do-button">去完成</button>
+                           </div>
+                           <div class="card more-daily-mission-box">
+                              <label class="daily-mission-text">分享文章</label>
+                              <label class="plus-point"> 10 </label>
+                              <img src="icons/coin.png" class="add-point" />
+                              <label class="plus"> + </label>
+                              <br>
+                              <label class="daily-mission-content">
+                                 分享
+                                 <論盡港童>
+                                 文章
+                              </label>
+                              <br>
+                              <div class="w3-light-grey w3-tiny w3-round-xlarge">
+                                 <div class="moredaily-statusbar w3-tiny w3-pink w3-round-xlarge" style="width:25%;">25%</div>
+                              </div>
+                              <br>
+                              <button class="moredaily-to-do-button">去完成</button>
+                           </div>
+                     
+                        <div class="column">
+                           <div class="card more-daily-mission-box">
+                              <label class="daily-mission-text">分享文章</label>
+                              <label class="plus-point"> 10 </label>
+                              <img src="icons/coin.png" class="add-point" />
+                              <label class="plus"> + </label>
+                              <br>
+                              <label class="daily-mission-content">
+                                 分享
+                                 <論盡港童>
+                                 文章
+                              </label>
+                              <br>
+                              <div class="w3-light-grey w3-tiny w3-round-xlarge">
+                                 <div class="moredaily-statusbar w3-tiny w3-pink w3-round-xlarge" style="width:25%;">25%</div>
+                              </div>
+                              <br>
+                              <button class="moredaily-to-do-button">去完成</button>
+                           </div>
+                           <div class="card more-daily-mission-box">
+                              <label class="daily-mission-text">分享文章</label>
+                              <label class="plus-point"> 10 </label>
+                              <img src="icons/coin.png" class="add-point" />
+                              <label class="plus"> + </label>
+                              <br>
+                              <label class="daily-mission-content">
+                                 分享
+                                 <論盡港童>
+                                 文章
+                              </label>
+                              <br>
+                              <div class="w3-light-grey w3-tiny w3-round-xlarge">
+                                 <div class="moredaily-statusbar w3-tiny w3-pink w3-round-xlarge" style="width:25%;">25%</div>
+                              </div>
+                              <br>
+                              <button class="moredaily-to-do-button">去完成</button>
+                           </div>
+                           <div class="card more-daily-mission-box">
+                              <label class="daily-mission-text">分享文章</label>
+                              <label class="plus-point"> 10 </label>
+                              <img src="icons/coin.png" class="add-point" />
+                              <label class="plus"> + </label>
+                              <br>
+                              <label class="daily-mission-content">
+                                 分享
+                                 <論盡港童>
+                                 文章
+                              </label>
+                              <br>
+                              <div class="w3-light-grey w3-tiny w3-round-xlarge">
+                                 <div class="moredaily-statusbar w3-tiny w3-pink w3-round-xlarge" style="width:25%;">25%</div>
+                              </div>
+                              <br>
+                              <button class="moredaily-to-do-button">去完成</button>
+                           </div>
+                        </div>
+                     </div>  -->
+                     
+                  </div>  
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+      <ons-template id="point-history.html">
+         <ons-page id="point-history-page">
+            
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div class="top-bar title-top-bar">
+                     <a href="#" class="back-button" onclick="document.querySelector('#navigator').popPage()">
+                      <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="credit-top-text">積分記錄</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="pointlist-content page-content" style="height:100%">
+                     <br><br>
+                     <div class="point-box w3-center">
+                        <div class="w3-center">
+                            <label class="point-text">Mind & Life 積分</label>
+                            <div>                           
+                             <img src="icons/coin.png" class="member-point" />
+                             <label class="total-point"><span id="point_history_point">100000</span></label>                           
+                              <div  class="w3-center"><label class="text-use">可用積分</label> </div>
+                           </div>
+                        </div> 
+                     </div>
+                     <div class="w3-center w3-row">
+                           <img src="images/logo1.png" class="w3-col image-logo" />  
+                          <!-- <div class="w3-rest">
+                              <p class="center-text">可用積分</p>
+                           </div>  -->
+                        </div>    
+                  
+                     
+                     <div class="w3-container" id="point_listing_2" ></div>
+                     
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="MindLife02.html">
+    <ons-page id="aboutus-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar title-top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="aboutus-top-text">關於我們</p>
+          </div>
+           <!-- Content -->
+          <div class="aboutus-content page-content">
+            <br><!--
+            <img src="images/logo2.png" class="aboutus-image-logo" />
+            <br>
+            <div class="aboutus-content-text">-->
+              <div id="about_home"></div>
+              <!--<p>《Mind & Life 心活誌》
+              <br>
+              《Mind & Life 心活誌》是香港首本以心理學為主題的生活月刊，由心活傳媒集團出版，於2014年11月3日創刊，並發展成為將生活文化及心理資訊結合的媒體品牌。
+              </p>
+              <p>
+              《Mind & Life 心活誌》，透過月刊、影片頻道，以及專題活動，以心理學角度剖析生活大小事，助都市人正視「心裡亞健康」，在浮華中重遇身心靈的綠洲。
+              </p>
+              <p>每月港鐵站派發</p>
+              <p>
+                每月首個星期五，下午5:00至8:00，亦會於以下地點派發（如遇公眾假期則順延一星期）：
+              </p>
+              <p>香港 ：銅鑼灣（港鐵站D出口，崇光百貨正門外）、中環（港鐵站A出口來往交易廣場天橋)</p>
+              <p>九龍：旺角（港鐵站B3出口來往新世紀廣場天橋）、紅磡（鋼鐵站D出口來往尖東天橋）</p>
+              <p>新界：沙田（港鐵站B出口，近公共運輸交匯處)
+              <br>
+                取閱點 / 睇驗點
+              <br>
+             《Mind & Life 心活誌》於每月3日出版，</p>
+            </div>-->
+            <!-- close content -->
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="MindLife03.html">
+    <ons-page id="contactus-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar title-top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="contactus-top-text">聯繫我們</p>
+          </div>
+           <!-- Content -->
+          <div class="contactus-content page-content">
+            <br />
+            <div class="w3-container" id="contact_home"></div>
+            <!--
+            <img src="images/logo2.png" class="contactus-image-logo" />
+            <br>
+            <div class="contactus-content-text">
+              <p>《Mind & Life 心活誌》</p>
+                  聯絡電話：（+852）2332-3883
+              <br>
+                  傳真號碼：（+852）2332-3962
+              <br>
+                  電郵地址：info@mindandlife.hk
+              <p>
+                  地址：
+              <br>
+                  香港九龍彌敦道570號基利商業大廈6樓全層（近油麻地站A2出口）
+              </p>
+              <p>
+                  辦公時間：
+              <br>
+                  星期一至五09:30 - 18:30（公眾假期除外）
+              </p>
+              <p>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.022736806035!2d114.16834061483189!3d22.31497984800129!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x340400c728e7e297%3A0xa0986713f8e1edbe!2sKelly%20Commercial%20Centre!5e0!3m2!1sen!2smy!4v1637750140501!5m2!1sen!2smy" width="310px" height="200px" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+              </p>
+            </div>-->
+            <!-- close content -->
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="MindLife04.html">
+    <ons-page id="feedback-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar title-top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="feedback-top-text">聯繫我們</p>
+          </div>
+           <!-- Content -->
+          <div class="feedback-content page-content">
+            <div class="feedback-content-text">
+              <p>Mind & Life 非常重視您的寶貴意見，我們相信您的意見可以讓我們不斷進步。如有任何查詢，歡迎您透過一下表格填寫資料與我們聯絡。</p>
+            </div>
+            <div>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>電郵：</b></label>
+                <input class="w3-input w3-medium" type="email" id ="feedback-email"  placeholder="輸入您的電郵">
+              </div>
+                <br><br>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>標題 ：</b></label>
+                <input class="w3-input w3-medium" type="text" id ="feedback-title"  placeholder="輸入您的標題">
+              </div>
+                <br><br>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>內容 ：</b></label>
+                <textarea class="w3-input w3-medium" type="text" id ="feedback-title"  placeholder="輸入您的內容..."></textarea>
+              </div>
+            </div>
+            <p style="margin-top: 30px;text-align:center;">
+              <ons-button onclick="" id="" style="background-color:#8c559e;width:55%;">發送信息</ons-button><br /><br/>
+            </p>
+            <!-- close content -->
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="MindLife05.html">
+    <ons-page id="tnc-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar title-top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="tnc-top-text">條款與細</p>
+          </div>
+           <!-- Content -->
+          <div class="tnc-content page-content">
+            <div id="tnc_home"></div>
+            <br>
+            <p class="tnc-title">司法管轄區及限制</p>
+            <p>
+              本行於中華人民共和國特別行政區（「香港」）控制和維持本網站。此網站的對象僅限於居住於香港的個人或者營業地點設於香港的公司。本行並沒有就本網址所載的資訊及資料可適用於或可供其他地點/司法管轄區使用而做出明示或暗示陳述。此等條款及細則均受香港法律管轄，任何爭議須受香港法院的非專屬管轄權所管轄。</p>
+            <p>
+              發佈本網頁之內容有可能被某些地區法例所限制。閣下需自行了解當中被限制之內容。
+            </p>
+            <p style="font-weight:bold;">產品及服務</p>
+            <p>
+              任何人士於當地購買或認購買任何此網址上所載之產品或使用此網址上所載之服務屬違法時，本網站不構成作出該等產品或服務之要約或招攬。如有任何疑問，閣下應在購買或認購任何產品或使用任何服務之前，咨詢當地的監管機構或管理機構。
+            </p>
+            <p>
+              如閣下繼續瀏覽此網站，即表示閣下同意閣下並非居住於香港以外的司法管轄區，亦不打算從香港以外的司法管轄區購買或認購任何產品或使用任何服務。
+            </p>
+            <p>
+              在符合提供該產品及服務的個別條款及細則的規定下，產品及服務僅由本行或有關的東亞銀行集團公司過聯營機構酌情提供，而且該等產品及服務可在不須另行通知下隨時撤銷或修訂。所有產品或服務未必在所有地區均有供應。某些服務可能需收取費用，佣金或其他手續費，詳情可向提供服務的
+            </p>
+            </div>
+          </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="MindandLife.html">
+    <ons-page id="info-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar title-top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="info-top-text">Mind and Life</p>
+          </div>
+           <!-- Content -->
+          <div class="info-content page-content">
+            <br>
+            <p style="text-align:center;">
+            <img src="images/logo2.png">
+            </p>
+            <hr>
+            <p class="info-list">
+              <ons-list>
+                <ons-list-item onclick="load_mindlife2_page()"><img src="icons/info11.png">關於我們</ons-list-item>
+                <ons-list-item onclick="load_mindlife3_page()"><img src="icons/info22.png">聯繫我們</ons-list-item>
+                <ons-list-item onclick="load_mindlife4_page()"><img src="icons/info33.png">反饋</ons-list-item>
+                <ons-list-item onclick="load_mindlife5_page()"><img src="icons/info44.png">條款及細則</ons-list-item>
+              </ons-list>
+            </p>
+            </div> 
+          </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="hreat.html">
+    <ons-page id="heartsearch-page">
+      
+      <div class="content" style="text-align: center">
+        <div class="backgrounds">
+          <div class="fixed-header">
+          <!-- logo -->
+          <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+          <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button">
+            <i class="fa fa-search"></i>
+          </button>
+          <!-- Member gift button -->
+          <a href="#" class="button" onclick="load_credit_page()">
+                <figure><img src="icons/gift.png"></figure>
+                <div class="text">會員中心</div>
+          </a>
+
+          <!-- Content title -->
+          <div class="wrapper">
+            <div class="scrolls">
+              <button onclick="" class="active">心活搜尋</button>
+              <button onclick="load_searchserviceprovider_page()">身心健康服務提供者搜索器</button>
+              <button onclick="load_productservices_page()">產品及服務</button>
+            </div>
+          </div><br />
+            <div class="tab">
+              <p style="font-weight:bold;text-align:center">心活搜尋</p>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="hreat-content">
+            <div class="tabcontent" id="home">
+              <p>Mind & Life 非常重視您的寶貴意見，我們相信您的意見可以讓我們不斷進步。如有任何查詢，歡迎您透過一下表格填寫資料與我們聯絡。</p>
+              <div>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>搜尋類別：</b></label><br />
+                <select class="w3-input w3-medium" name="heartsearch-type" id="heartsearch-type">
+                  <option value="type1">類別1</option>
+                  <option value="type2">類別2</option>
+                  <option value="type3">類別3</option>
+                  <option value="type4">類別4</option>
+                </select>
+              </div>
+                <br><br>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>關鍵字 ：</b></label>
+                <input class="w3-input w3-medium" type="text" id ="heartsearch-keyword"  placeholder="輸入關鍵字">
+              </div>
+                <br><br>
+              </div>
+              <p style="margin-top: 30px;text-align:center;">
+                <ons-button onclick="" id="" style="background-color:#8c559e;width:55%;">搜尋</ons-button><br /><br/>
+              </p>
+              
+            </div>
+          <!-- main page close -->
+          </div>
+        <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" onclick="load_main_page()"">
+                           <figure><img src="icons/icon-home.png"></figure>
+                           <div class="text">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea.png" style="width:19px; height:24px; margin-bottom:2px;"></figure>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart-active.png" style="width:25px; height:22px"></figure>
+                           <div class="activetext">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+      </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="hreat2.html">
+    <ons-page id="searchserviceprovider-page">
+      
+      <div class="content" style="text-align: center">
+        <div class="backgrounds">
+          <div class="fixed-header">
+          <!-- logo -->
+          <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+          <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button">
+            <i class="fa fa-search"></i>
+          </button>
+          <!-- Member gift button -->
+          <a href="#" class="button" onclick="load_credit_page()">
+             <figure><img src="icons/gift.png"></figure>
+             <div class="text">會員中心</div>
+          </a>
+
+          <!-- Content title -->
+          <div class="wrapper">
+            <div class="scrolls">
+              <button onclick="load_heartsearch_page()">心活搜尋</button>
+              <button onclick="" class="active">身心健康服務提供者搜索器</button>
+              <button onclick="load_productservices_page()">產品及服務</button>
+            </div>
+          </div><br />
+            <div class="tab">
+              <p style="font-weight:bold;text-align:center">身心健康服務提供者搜索器</p>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="hreat2-content">
+            <div class="tabcontent" id="home">
+              <p>Mind & Life 非常重視您的寶貴意見，我們相信您的意見可以讓我們不斷進步。如有任何查詢，歡迎您透過一下表格填寫資料與我們聯絡。</p>
+              <div>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>搜尋服務類別：</b></label><br />
+                <select class="w3-input w3-medium" name="searchserviceprovider-type" id="searchserviceprovider-type">
+                  <option value="type1">服務類別1</option>
+                  <option value="type2">服務類別2</option>
+                  <option value="type3">服務類別3</option>
+                  <option value="type4">服務類別4</option>
+                </select>
+              </div>
+                <br><br>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>關鍵字 ：</b></label>
+                <input class="w3-input w3-medium" type="text" id ="searchserviceprovider-keyword"  placeholder="輸入關鍵字">
+              </div>
+                <br><br>
+              </div>
+              <p style="margin-top: 30px;text-align:center;">
+                <ons-button onclick="" id="" style="background-color:#8c559e;width:55%;">搜尋</ons-button><br /><br/>
+              </p>
+            </div>
+          <!-- main page close -->
+          </div>
+        <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" onclick="load_main_page()">
+                           <figure><img src="icons/icon-home.png"></figure>
+                           <div class="text">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea.png" style="width:19px; height:24px; margin-bottom:2px;"></figure>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart-active.png" style="width:25px; height:22px"></figure>
+                           <div class="activetext">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+      </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="hreat3.html">
+    <ons-page id="product-services-page">
+      
+      <div class="content" style="text-align: center">
+        <div class="backgrounds">
+          <div class="fixed-header">
+          <!-- logo -->
+          <img class="btn-drawer" src="icons/drawer.png" name="submit" onClick="fn.open()" style="margin-bottom:5px" />
+          <input type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+          <button type="submit" class="search-button">
+            <i class="fa fa-search"></i>
+          </button>
+          <!-- Member gift button -->
+          <a href="#" class="button" onclick="load_credit_page()">
+            <figure><img src="icons/gift.png"></figure>
+            <div class="text">會員中心</div>
+          </a>
+
+          <!-- Content title -->
+          <div class="wrapper">
+            <div class="scrolls">
+              <button onclick="load_heartsearch_page()">心活搜尋</button>
+              <button onclick="load_searchserviceprovider_page()">身心健康服務提供者搜索器</button>
+              <button class="active">產品及服務</button>
+            </div>
+          </div><br />
+            <div class="tab">
+              <button id="ps_filter_all" class="tablink activetext" onclick="load_ps_filter('all')" >綜合</button>
+              <button id="ps_filter_hot" class="tablink activetext" onclick="load_ps_filter('hot')">最熱門</button>
+              <button id="ps_filter_new" class="tablink activetext" onclick="load_ps_filter('new')">最新</button>
+              <div class=" w3-row w3-right" style="width:88px; border-left:1px solid lightgray">                
+                <button id="ps_filter_select" class="w3-rest w3-center filtertext"  onclick="load_ps_filter('select')">
+                   <img class=" w3-left " src="icons/Filter30.png" style="width:20px;margin-left:-10px;">
+                  <span style="padding-left:5px;"> 篩選 </span>
+                </button>
+              </div>              
+            <!--  <button id="ps_filter_select" class="tablinks" onclick="load_ps_filter('select')">篩選</button>  -->
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="hreat3-content">
+            <div class="tabcontent" id="home">
+              <div class="hreat3-row" id="hreat3_product">
+              </div>
+            </div>
+          <!-- main page close -->
+          </div>
+          <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" onclick="load_main_page()">
+                           <figure><img src="icons/icon-home.png"></figure>
+                           <div class="text">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <figure><img src="icons/idea.png" style="width:19px; height:24px; margin-bottom:2px;"></figure>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart-active.png" style="width:25px; height:22px"></figure>
+                           <div class="activetext">
+                              心活百科
+                           </div>
+                        </a>                        
+         </div>
+      </div>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="hreat4.html">
+    <ons-page id="productservice-details-page">
+        <div id="product_details"></div>
+    <!--  <ons-card>
+        <div class="card-image">
+          <div class="back">  
+            <img src="images/magazine/portrait4.png" class="thumbnail" >
+            <i class="fas fa-arrow-left" style="font-size:20px;text-shadow: 2px 2px 4px #000000; color:#ffffff;" onclick="goBack()"></i>
+          </div>
+        </div>  
+        <div class="title">
+          L'Oréal Paris
+        </div>
+        <div class="event-content">
+          <div class="datepost">
+          發佈於 June 8, 2020
+          </div>
+          <table width="100%">
+            <tr>
+              <td width="50%" valign="middle"><span class="tag">旺角</span><span class="tag2">王醫生</span></td>
+              <td width="50%" align="right"> <img src="icons/like2.png" height="30px" style="margin-right:10px;"><img src="icons/share2.png" height="30px" style="margin-right:10px;"></td>
+            </tr>
+          </table>
+          <table width="100%">
+            <tr>
+              <td width="2%" valign="middle"><ons-icon icon="fa-heart"></ons-icon></td>
+              <td width="48%"><span style="text-indent: 15px;font-size:15px;">14人點讚</span></td>
+              <td width="50%" align="right"> <img src="icons/coin.png" class="hreat4-point"/><label class="hreat4-point-no" > 100000 </label></td>
+            </tr></table>
+          
+            <p style="font-size:15px;">
+              優惠詳情
+              <ul style="padding:0;">
+                <li>優惠期有效期由2020年6月15至8月31日為止。</li>
+                <li>優惠只適用於香港居民。</li>
+                <li>如有查詢，請電郵至info@xxx.com.hk 或致電+852 1234 1234。</li>
+              </ul>
+            </p>
+
+            <p style="font-size:15px;">
+              如何使用
+              <ul style="padding:0;">
+                <li>於香港杜莎夫人蠟像館正門售票處購票時出示有效 香港身份證即可享有此優惠。</li>
+              </ul>
+            </p>
+
+            <p style="font-size:15px;">
+              商戶條款及細則 <br />
+              優惠須受香港杜莎夫人蠟像館成人門票之條款及細則約束。詳情請按此。<br />
+              <ons-button modifier="quiet" onclick="load_productservices_tnc_page()"><詳情請按此參閱></ons-button>
+            </p>
+
+            <p style="font-size:15px;">
+              內容由商戶提供。
+            </p>
+            <p style="text-align:center"><ons-button onclick="" id="" style="background-color: #8c559e;width: 55%;">兌換產品/服務</ons-button></p>
+        </div>
+      </ons-card>  -->
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="hreat4_tnc.html">
+    <ons-page id="productservicetnc-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar title-top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="productservicetnc-top-text">產品及服務詳情</p>
+          </div>
+           <!-- Content -->
+          <div class="productservicetnc-content page-content">
+            <br>
+            <div class="productservicetnc-content-text">
+              <p>一般條款及細則</p>
+              <p>1. 除特別聲明外，優惠推廣日期由2020年6月15日至9月30日為止。</p>
+              <p>2. 本活動所有產品、服務、諮詢及建議均由參與景點提供並全權負責。香港旅遊發展局並非該等產品及/或服務、諮詢及建議之提供者，亦不對該等產品及/或服務、諮詢及建議作出任何陳述或保證。</p>
+              <p>3. 本優惠只適用於香港居民。有需要時，參與景點可要求訪客出示有效香港身份證件以作確認。。</p>
+              <p>4. 所有優惠不可兌換現金或換成其他貨品或折扣，並不設退換。</p>
+              <p>5. 除特別列明外，優惠不可與參與景點之任何其他推廣優惠、折扣/特價產品、公價產品、禮券現金券、積分計劃、參與景點內部優惠同時使用。</p>
+              <p>6. 優惠數量有限，先到先得。</p>
+              <p>7. 如指定之優惠產品售完，參與景點將提供其他等值或更高價值的優惠。</p>
+              <p>8. 優惠並不適用於參與景點之特定日期(如適用)。詳情請向參與景點查詢。</p>
+              <p>9. 每位合資格的優惠使用者每次惠顧只可享優惠。</p>
+            </div>
+            <!-- close content -->
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>
+
+<!--
+  <ons-template id="ac.html">
+    <ons-page id="memberdetails-page">
+      
+
+      <div class="content">
+        <div class="">
+          <div class="top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true" style="color:black;"></i>
+            </a>
+            <br>
+          </div>
+           
+          <div class="memberdetails-content">
+            <div style="text-align:center">
+              <p><img id="profile-image" src="images/photo.png" style="max-width:100px;max-height:100px;border-radius: 50%;"><input type="image" src="images/cam.png" onclick="picture_selection()" style="margin-left:-15px;"/></p>
+              <p>Penny</p>
+              <p style="color:#aaaaaa;">info@mindandlife.com</p>
+            </div>
+            <br />
+            <ons-list>
+              <ons-list-item>
+                <div class="memberdetails-list left">用戶名稱</div>
+                <div class="center">Penny</div>
+                <div class="right"></div></ons-list-item>
+              <ons-list-item>
+                <div class="memberdetails-list left">電郵</div>
+                <div class="center">info@mindandlife.com</div>
+                <div class="right"></div></ons-list-item>
+              <ons-list-item>
+                <div class="memberdetails-list left">性別</div>
+                <div class="center">未填寫</div>
+                <div class="right">></div></ons-list-item>
+              <ons-list-item>
+                <div class="memberdetails-list left">職業</div>
+                <div class="center">法律</div>
+                <div class="right">></div></ons-list-item>
+              <ons-list-item>
+                <div class="memberdetails-list left">收入</div>
+                <div class="center">未填寫</div>
+                <div class="right">></div></ons-list-item>
+            </ons-list>
+            <br />
+            <p style="text-align:center"><ons-button onclick="" id="" style="background-color: #8c559e;width: 55%;">更新個人資料</ons-button></p>
+            
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>  -->
+
+  <ons-template id="ac.html">
+         <ons-page id="memberdetails-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="">
+               <div class="">
+                  <div class="top-bar">
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true" style="color:black;"></i>
+                     </a>
+                     <br>
+                  </div>
+                  <!-- Content -->
+                  <div class="memberdetails-content">
+                     <div style="text-align:center">
+                        <p><img id="profile-image" src="images/photo.png" style="max-width:100px;max-height:100px;border-radius: 50%;"><input type="image" src="images/cam.png" onclick="picture_selection()" style="margin-left:-15px;"/></p>
+                        <p><span class="center" id="personal_name2" ></span></p>
+                        <p style="color:#aaaaaa;"><span class="center" id="personal_email2" ></span></p>
+                     </div>
+                     <br />
+                     <ons-list>
+                        <ons-list-item>
+                           <div class="memberdetails-list left">用戶名稱</div>
+                           <span class="center" id="personal_name" style="font-weight:bold; font-size:12px"></span>
+                           <div class="right"></div>
+                        </ons-list-item>
+                        <ons-list-item>
+                           <div class="memberdetails-list left">電郵</div>
+                           <div class="center" id="personal_email" style="font-weight:bold; font-size:12px"></div>
+                           <div class="right"></div>
+                        </ons-list-item>
+                        <ons-list-item>
+                           <div class="memberdetails-list left">性別</div>
+                           <div class="center" id="personal_sex"></div>
+                           <div class="right">></div>
+                        </ons-list-item>
+                        <ons-list-item>
+                           <div class="memberdetails-list left">職業</div>
+                           <div class="center" id="personal_occupation">法律</div>
+                           <div class="right" onclick="load_job_info()">></div>
+                        </ons-list-item>
+                        <ons-list-item>
+                           <div class="memberdetails-list left">收入</div>
+                           <div class="center" id="personal_income">未填寫</div>
+                           <div class="right">></div>
+                        </ons-list-item>
+                     </ons-list>
+                     <br />
+                     <p style="text-align:center">
+                        <ons-button style="background-color: #8c559e;width: 55%;" onclick="update_personal_info()">更新個人資料</ons-button>
+                     </p>
+                     <!-- close content -->
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="setting.html">
+    <ons-page id="setting-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="setting-top-text">設定</p>
+          </div>
+           <!-- Content -->
+          <div class="setting-content">
+            <br>
+            <ons-list>
+              <ons-list-item onclick="load_changepassword_page()">
+                <div class="setting-list left">更改密碼</div>
+                <div class="center">********</div>
+                <div class="right">></div></ons-list-item>
+              <ons-list-item onclick="app.selectFontsize()">
+                <div class="setting-list left">字體大小</div>
+                <div class="center">一般</div>
+                <div class="right">></div></ons-list-item>
+              <ons-list-item onclick="app.selectLanguage()">
+                <div class="setting-list left">語言</div>
+                <div class="center">繁體中文</div>
+                <div class="right">></div></ons-list-item>
+            </ons-list>
+            <br />
+            <!-- close content -->
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="changepassword.html">
+    <ons-page id="changepassword-page">
+      <!-- <ons-toolbar>
+        <div class="center">Page 1</div>
+      </ons-toolbar> -->
+
+      <div class="content">
+        <div class="backgrounds">
+          <div class="top-bar">
+            <a href="#" class="back-button" onclick="goBack()">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+            </a>
+            <br>
+            <p class="changepassword-top-text">更改密碼</p>
+          </div>
+           <!-- Content -->
+          <div class="changepassword-content">
+            <div>
+              <br /><br />
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>舊密碼：</b></label>
+                <input class="w3-input w3-medium" type="password" id ="old-password"  placeholder="輸入舊密碼">
+              </div>
+                <br><br>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>新密碼：</b></label>
+                <input class="w3-input w3-medium" type="password" id ="new-password"  placeholder="輸入新密碼">
+              </div>
+                <br><br>
+              <div class="w3-container">
+                <label class="w3-left w3-medium" style="margin-left:10px;"><b>確認新密碼 ：</b></label>
+                <input class="w3-input w3-medium" type="password" id ="repeat-new-password"  placeholder="重新輸入新密碼"></input>
+              </div>
+              <br />
+              <p style="text-align:center"><ons-button onclick="" id="" style="background-color: #8c559e;width: 55%;">更改密碼</ons-button></p>
+            </div>
+            <!-- close content -->
+          </div>
+        </div> 
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="history.html">
+         <ons-page id="history-page">
+            <div class="backgrounds" style="text-align: center">
+               <div class="top-bar2 title-top-bar2">
+                  <div class="history-fixed-header">
+                     <div class="top-bar">
+                        <a href="#" class="back-button" onclick="goBack()">
+                        <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                        </a>
+                        <br>
+                        <p class="history-top-text">歷史記錄</p>
+                     </div>
+                     <div class="history-tab">
+                        <button class="tablinks active" id="history_article" onclick="replace_history('2')">文章</button>
+                        <button class="tablinks" id="history_video" onclick="replace_history('1')">影片</button>
+                     </div>
+                  </div>
+                  <!-- Content -->
+                  <div class="history-content" style="height:100%; overflow:auto">
+                     <div class="tabcontent" id="history_list_all">
+
+                     </div>
+                     <div class="tabcontent" id="video">
+                     </div>
+                     <!-- main page close -->
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="bookmark.html">
+         <ons-page id="bookmark-page">
+            <div class="backgrounds"  style="text-align: center">
+               <div class="top-bar2 title-top-bar2">
+                  <div class="bookmark-fixed-header">
+                     <div class="top-bar">
+                        <a href="#" class="back-button" onclick="goBack()">
+                        <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                        </a>
+                        <br>
+                        <p class="bookmark-top-text">我的書籤</p>
+                     </div>
+                     <div class="bookmark-tab">
+                        <button class="tablinks active" id="article_bookmark" onclick="replace_bookmark('2')">文章</button>
+                        <button class="tablinks" id="video_bookmark" onclick="replace_bookmark('1')">影片</button>
+                     </div>
+                  </div>
+                  <!-- Content -->
+                  <div class="hreat3-content" style="height:100%; overflow:auto"  >
+                     <div class="tabcontent"  id="bookmark_list_all"></div>  
+                     <!--  </div>  -->
+                     <div class="tabcontent" id="video">
+                     </div>
+                     <!-- main page close -->
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <ons-template id="coupons.html">
+         <ons-page id="coupons-list-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="coupons-list-top-text">我的優惠券</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="coupons-list-content page-content" id="coupons_downloaded_list">
+                     
+                   <!--  <ons-card class="coupon-card">
+                        <div class="coupons-list-card-image">
+                           <div class="coupons-list-back">
+                              <ons-button class="coupon-viewmore" onclick="load_coupon('2')">查看更多</ons-button>
+                              <img src="images/couponpic1.png" class="thumbnail" style="max-width:100%">
+                              <img src="images/couponpic2.png" class="thumbnail" style="max-width:100%">
+                              <img src="images/couponpic3.png" class="thumbnail coupon-barcode" style="max-width:100%;">
+                              <label class="coupon-barcodeno">1003110110491</label>
+                           </div>
+                           <hr style="border-top: 2px dotted black;margin:0;"/>
+                           <p class="coupon-expiredate">有效日期至：2021/12/31</p>
+                        </div>
+                     </ons-card>
+                     <ons-card class="coupon-card">
+                        <div class="coupons-list-card-image">
+                           <div class="coupons-list-back">
+                              <ons-button class="coupon-viewmore" onclick="">查看更多</ons-button>
+                              <img src="images/couponpic1.png" class="thumbnail" style="max-width:100%">
+                              <img src="images/couponpic2.png" class="thumbnail" style="max-width:100%">
+                              <img src="images/couponpic4.png" class="thumbnail coupon-barcode" style="max-width:100%;">
+                              <label class="coupon-barcodeno">1003110110491</label>
+                           </div>
+                           <hr style="border-top: 2px dotted black;margin:0;"/>
+                           <p class="coupon-expiredate">有效日期至：2021/12/31</p>
+                        </div>
+                     </ons-card>  -->
+                     <!-- close content -->
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+      <ons-template id="coupon_redeem.html">
+         <ons-page id="coupon-redeem-page">
+            <!-- <ons-toolbar>
+               <div class="center">Page 1</div>
+               </ons-toolbar> -->
+            <div class="backgrounds">
+               <div class="top-bar2 title-top-bar2">
+                  <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="coupons-list-top-text">運用優惠券</p>
+                  </div>
+                  <!-- Content -->
+                  <div class="coupons-list-content page-content" id="coupon_redeem_content" style="margin-top:30px;">
+                     
+                   
+                  </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+      <ons-template id="search.html">
+         <ons-page id="search-list-page">            
+            <div class="search-content">
+               <div class="backgrounds">
+                  <div class="top-bar2 title-top-bar2">
+                     <!-- search box -->
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <button class="search-cancel" ><span style="font-size: 18px;">搜索成绩</span></button>
+                  
+                  <!-- Content -->
+                  <div class="search-list-content page-content">
+                     <br>
+                     <div id="search_results" style="height:85%; overflow:auto"></div>
+                  </div>
+               </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+      <ons-template id="free_main_page.html">
+         <ons-page id="free-main-page">
+            <div class="backgrounds" style="text-align:center;">
+               <div class="top-bar2 title-top-bar2">
+                  <div class="main-fixed-header" style="padding-top:10px" >
+                     <!-- logo  onClick="fn.open()" -->
+                     <img class="btn-drawer" src="icons/drawer.png" name="submit" style="width:8%; margin-right:2% ; margin-left:5px;" />
+                     <!-- search box -->
+                     <input id = "main_page_search" type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit" style="width:70%;"/>
+                     <button type="submit" class="search-button" onclick="load_search_page()">
+                     <i class="fa fa-search" style="padding-bottom:3px"></i>
+                     </button>
+                     <!-- Member gift button -->
+                     
+                     <a href="#" class="button" onclick="registered_member_only()">
+                        <figure><img src="icons/gift.png"></figure>
+                        <div class="text">
+                           會員中心
+                        </div>
+                     </a>
+                     <!-- Content title -->
+                     <div id="free_main_page_header" class="toptab">
+                     </div>
+                  </div>
+                  <div class="mp-home-content">
+                     <img src="images/ad.png" id="initial_image" class="free-mp-slide-img" />
+                     <br>
+                     <div style="margin-bottom:10px; margin-top:-10px">
+                        <span class="mp-hot-video" style="left:0;width:80%;font-size:22px">熱門文章</span>
+                        <a href="#" ><img src="icons/link_icon.png" style="margin-top:25px;" width=15 height=15 onclick="registered_member_only()"></a>                 
+                     </div>
+                     
+                     <div id="free_main_page_article_list"></div>
+                     <br>
+                     <div class="mp_wrapper" style="height:100px">
+                        <div class="mp_scrolls">
+                           <img class="mp_category_set" src="images/coupon1.png"  onclick="registered_member_only()">               
+                           <img class="mp_category_set" src="images/coupon2.png"  onclick="registered_member_only()">                
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="registered_member_only()">                
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="registered_member_only()">                
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="registered_member_only()">
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="registered_member_only()">
+                           <img class="mp_category_set" src="images/coupon3.png"  onclick="registered_member_only()">
+                        </div>
+                     </div>
+                     <br>
+                     <div>
+                        <div style="margin-bottom:10px; margin-top:-10px">
+                           <span class="mp-hot-video" style="left:0;width:80%;font-size:22px">熱門影片</span>
+                           <a href="#" ><img src="icons/link_icon.png" style="margin-top:25px;" width=15 height=15 onclick="registered_member_only()"></a>                 
+                        </div>
+                        <div id="free_video_list"></div>
+                        <br>
+                        <br>
+                        <!-- main page close -->
+                     </div>
+                     </div>
+                     <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" >
+                           <figure><img src="icons/icon-home-active.png"></figure>
+                           <div class="activetext">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <img src="icons/idea.png" width=18 height=22>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+      <ons-template id="free_public_page.html">
+         <ons-page id="free_public-page">
+            <div class="backgrounds" style="text-align: center;height:100%">
+               <div class="top-bar2 title-top-bar2">
+                  <div class="fixed-header">
+                     <!-- logo onClick="fn.open()"-->
+                     <ons-button modifier="quiet"  ><img class="btn-drawer" src="icons/drawer.png" name="submit" /></ons-button>
+                     <!-- search box -->
+                     <input id="public_search" type="search" placeholder="請輸入關鍵字搜尋..." class="search-field" name="submit"/>
+                     <button type="submit" class="search-button" onclick="registered_member_only()">
+                     <i class="fa fa-search"></i>
+                     </button>
+                     <!-- Member gift button -->
+                     
+                     <a href="#" class="button" onclick="registered_member_only()">
+                        <figure><img src="icons/gift.png"></figure>
+                        <div class="text">
+                           會員中心
+                        </div>
+                     </a>
+                     <!-- Content title -->
+                     <div id="free_public_top_header" class="ptoptab"></div>
+                     <br />
+                     <div class="tab">
+                        <button class="tablinks active" onclick="" id="defaultOpen">綜合</button>
+                       <!-- <button class="tablinks" onclick="opentab(event, 'hot')">最熱門</button>
+                        <button class="tablinks" onclick="opentab(event, 'new')">最新</button>  
+                        <button class="tablinks filter">篩選</button>  -->
+                     </div>
+                  </div>
+                  <!-- Content -->
+                  <div class="mp-home-content2">
+                     <div id="free_public_main_display" style=""></div>
+                  </div>
+                  <div class="tabcontent" id="hot">
+                  </div>
+                  <div class="tabcontent" id="new">
+                  </div>
+                  <!-- main page close -->
+                  <div class="ifooter w3-center w3-row" style="height:50px">                        
+                        <a href="#" class="w3-col button-bottom" >
+                           <figure><img src="icons/icon-home-active.png"></figure>
+                           <div class="activetext">
+                              首頁
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_article_all()">
+                           <figure><img src="icons/icon-Magazine.png"></figure>
+                           <div class="text">
+                              心話誌
+                           </div>
+                        </a>                      
+                        <a href="#" class="w3-col  playbtn" onclick="load_single_video2('21')">
+                           <img src="icons/middle.png" >
+                        </a>
+                       
+                        <a href="#" class=" w3-col button-bottom "  onclick="load_event_page()">
+                           <img src="icons/idea.png" width=18 height=22>
+                           <div class="text">
+                              互動區
+                           </div>
+                        </a>
+                        <a href="#" class=" w3-col button-bottom" style="width:17.5%;"  onclick="load_heartsearch_page()">
+                           <figure><img src="icons/heart.png"></figure>
+                           <div class="text">
+                              心活百科
+                           </div>
+                        </a>                        
+                     </div>
+               </div>
+            </div>
+         </ons-page>
+      </ons-template>
+
+  <!-- Error message display center -->
+  <ons-toast id="myToast" animation="ascend">
+ <span id="err_msg"></span>
+  <button onclick="myToast.hide()">ok</button>
+</ons-toast>
+<!-- ---------------- -->  
+
+<div id="ads_modal" class="w3-modal">
+    <div class="w3-modal-content" style="background-color:transparent;">
+      
+      <div class="w3-container" >
+          
+     <!--   <h2 style="text-align:center">Product Card</h2>   -->
+
+<div class="ads_card">
+  <div onclick="document.getElementById('ads_modal').style.display='none'" class="w3-button w3-right" style="transform: translate(60% , 30% ); opacity:0.8">
+         <img src="icons/Delete-512.png" width=25 height=25>
+      </div >  
+  <img src="https://dev2.thenextbigthinghk.com//mindlifeapp/admin/public/advertisement/ad6.jpg" alt="Denim Jeans" style="width:100%;">
+ <!-- <div style="background-color:white">
+    <h1>Tailored Jeans</h1>
+    <p class="ads_price">$19.99</p>
+    <p>Some text about the jeans. Super slim and comfy lorem ipsum lorem jeansum. Lorem jeamsun denim lorem jeansum.</p>
+  </div>  -->
+  <button>去看看</button>
+</div>
+      </div>
+    </div>
+  </div>
+
+<div id="login_modal" class="w3-modal">
+    <div class="w3-modal-content">
+      <header class="w3-container w3-teal"> 
+        <span onclick="document.getElementById('login_modal').style.display='none'" 
+        class="w3-button w3-display-topright">&times;</span>        
+      </header>
+      <div class="w3-container" id="" style="width:400px; height:500px">
+                 <br/> 
+                     <div class="w3-container w3-left">
+                        <h2 class="w3-center"><b>登入</b></h2>
+                        <h5 class="w3-center"><b>登入後才能解鎖功能</b></h5>
+                        
+                        <br />
+                        <div>
+                           <label class="w3-left w3-medium" style="margin-left:10px;"><b>用戶名稱</b></label>
+                           <!--<ons-input id="username" modifier="underbar" placeholder="輸入您的用戶名稱"></ons-input>-->
+                           <input class="w3-input w3-medium" type="text" id = "free_user_name" placeholder="輸入您的用戶名稱">          
+                        </div>
+                        <div>
+                           <label class="w3-left w3-medium" style="margin-left:10px;"><b>密碼</b></label>
+                           <!--<ons-input id="username" modifier="underbar" placeholder="輸入您的用戶名稱"></ons-input>-->
+                           <input class="w3-input w3-medium" type="text" id = "free_user_password"  placeholder="輸入您的密碼">          
+                        </div>
+                        <div class="w3-container w3-margin-top">
+                           <div class="w3-left w3-medium">  
+                              <input class="w3-check" id="check-1" type="checkbox">
+                              <label><b>記住我</b></label>          
+                           </div>
+                           <div class="w3-right">
+                              <ons-button modifier="quiet" style="color:#8c559e;" onclick="forgot_password()">忘記密碼</ons-button>
+                              <p></p>
+                           </div>
+                        </div>
+
+                        <div style="bottom:5px">
+                           <ons-button onclick="free_login()" id="push-button" style="width:90%;background-color: #8c559e;">登入</ons-button>
+                           <br /><br/> 
+                           <!--   <ons-button onClick="myfacebook()" style="background-color: #5b9eef;width: 55%; margin-top:10px;">以 Facebook 登入</ons-button>                    
+                              <ons-button id="" onClick="load_google_page()" style="background-color: #f84415;width: 55%;margin-top:3px ">以 Google 登入</ons-button> -->
+                           <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                           <p class="w3-center" style="bottom:0;">
+                              還沒有賬號？ 
+                              <ons-button modifier="quiet" style="color:#8c559e;" onclick="document.getElementById('login_modal').style.display='none'; load_registration_page()">立即註冊</ons-button>
+                           </p>
+                        </div>
+              </div>
+          </div>
+    </div>
+  </div>  
+
+
+<template id="dialog.html">
+  <ons-dialog id="my-dialog">
+    <div style="text-align: center; padding: 10px;">
+      <p>
+        谢谢您
+      </p>
+      <Span id="msg_text">
+        下載成功。購買物品時請出示。
+      </span>
+      <p>
+        <ons-button onclick="hideDialog('my-dialog')" style="background-color:red; padding:3px">关闭</ons-button>
+      </p>
+    </div>
+  </ons-dialog>
+</template>
+
+<ons-template id="product_point_change.html">
+         <ons-page id="product-point-change-page">              
+               <div class="backgrounds"> 
+                   <div class="top-bar2 title-top-bar2">
+                       <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="coupons-list-top-text">運用優惠券</p>
+                  </div>
+                     <!-- search box -->
+                    <div class="credit-content"> 
+                     <div id="product_change" style="background-color:white"></div>
+                    </div>
+
+                   </div>         
+                  
+               
+             </div>  
+         </ons-page>
+</ons-template>
+
+<ons-template id="ad_out_link.html">
+         <ons-page id="ad-out-link-page"> 
+                       
+           <!--    <div class="backgrounds"> 
+                   <div class="top-bar2 title-top-bar2">
+                       <div>
+                     <a href="#" class="back-button" onclick="goBack()">
+                     <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                     </a>
+                     <br>
+                     <p class="coupons-list-top-text">運用優惠券</p>
+                  </div>
+                     
+                    <div class="credit-content"> 
+                     <div id="product_change" style="background-color:white"></div>
+                    </div>
+
+                   </div>         
+                  
+               
+             </div>  -->
+         </ons-page>
+</ons-template>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "404715700325",
+    "project_id": "mindlifeapp-dc983",
+    "storage_bucket": "mindlifeapp-dc983.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404715700325:android:016a9fd29fadce4173c68c",
+        "android_client_info": {
+          "package_name": "com.mindlife.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404715700325-cjr5qmfi5hiv5u704dn9d1i8gb0gqn46.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzRJreJa6Dvyz_3V64aJGcFwxLxTzCNf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404715700325-cjr5qmfi5hiv5u704dn9d1i8gb0gqn46.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
